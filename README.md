@@ -2,7 +2,7 @@
 
 ##### Hongze Chen, [Zehong Lin](https://zhlinup.github.io/), [Jun Zhang](https://eejzhang.people.ust.hk/).
 
-#### [**Paper**](https://arxiv.org/abs/2410.02619) | [**Project Page**](https://stopaimme.github.io/GI-GS/) 
+#### [**Paper**](https://arxiv.org/abs/2410.02619) | [**Project Page**](https://stopaimme.github.io/GI-GS-site/)  
 
 ## Overview
 
