@@ -438,12 +438,12 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             albedo_path = frame["file_path"].replace("rgba", "albedo") + ".png"
 
         if "orb" in data_root:
-            albedo_gt = np.array(Image.open(os.path.join(data_root2, albedo_path)).resize((512, 512)))[..., :3]
+            albedo_gt = np.array(Image.open(os.path.join(data_root2, 'chapel_day_4k_32x16_rot0', albedo_path)).resize((512, 512)))[..., :3]
         else:
-            albedo_gt = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., :3]
+            albedo_gt = np.array(Image.open(os.path.join(data_root, 'chapel_day_4k_32x16_rot0', albedo_path)))[..., :3]
         # mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
         if "orb" in data_root:
-            mask = np.array(Image.open(os.path.join(data_root, mask_path)).resize((512, 512))) > 0
+            mask = np.array(Image.open(os.path.join(data_root, 'chapel_day_4k_32x16_rot0', mask_path)).resize((512, 512))) > 0
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
         else:
