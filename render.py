@@ -447,7 +447,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
         else:
-            mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
+            mask = np.array(Image.open(os.path.join(data_root, 'chapel_day_4k_32x16_rot0', albedo_path)))[..., 3] > 0
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
 
