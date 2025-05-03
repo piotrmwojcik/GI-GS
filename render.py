@@ -491,7 +491,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     albedo_ssim = albedo_ssim_avg / len(frames)
     albedo_lpips = albedo_lpips_avg / len(frames)
     roughmse = mse_loss / len(frames)
-    print(f"albedo_psnr: {albedo_psnr}")
+    print(f"albedo_psnr: {albedo_psnr} albedo_ssim: {albedo_ssim} albedo_lpips: {albedo_lpips}")
     print(f"roughmse: {roughmse}")
 
 
