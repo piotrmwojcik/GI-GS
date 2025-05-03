@@ -476,6 +476,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         roughmse =(albedo_map - albedo_gt) ** 2  # 平方误差
         masked_diff = roughmse[mask] 
         mse_loss += masked_diff.mean()
+        print(albedo_map)
         three_channel_ratio = (albedo_map / albedo_map.clamp_min(1e-6)).median(dim=0).values.tolist()
         print(three_channel_ratio)
         albedo_map *= three_channel_ratio
