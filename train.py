@@ -313,8 +313,9 @@ def training(
         gt_image = viewpoint_cam.original_image[0:3, :, :].cuda()
         gt_image = (gt_image * alpha_mask + background[:, None, None] * (1.0 - alpha_mask)).clamp(0.0, 1.0)
         
-        loss: torch.Tensor
+        loss: torch.Tensor = 0.00005 * cubemap.split_envmap_loss()[1]
         Ll1 = F.l1_loss(image, gt_image)
+
         normal_loss = 0.0
         if iteration <= pbr_iteration:
             loss = (1.0 - opt.lambda_dssim) * Ll1 + opt.lambda_dssim * (1.0 - ssim(image, gt_image))
