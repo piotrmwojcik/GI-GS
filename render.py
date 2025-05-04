@@ -436,11 +436,11 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             data_root2 = data_root.replace("blender_LDR", "ground_truth")
         else:
             albedo_path = frame["file_path"].replace("rgba", "albedo") + ".png"
-            print('!!! ',  albedo_path)
 
         if "orb" in data_root:
             albedo_gt = np.array(Image.open(os.path.join(data_root2, 'golden_bay_4k_32x16_rot330', albedo_path)).resize((512, 512)))[..., :3]
         else:
+            print('!!! ', os.path.join(data_root, 'albedo', albedo_path))
             albedo_gt = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., :3]
         # mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
         if "orb" in data_root:
