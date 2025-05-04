@@ -504,6 +504,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     reconstructed_albedo_list = []
     lpips_fn = LPIPS(net="vgg").cuda()
     mse = torch.nn.MSELoss(reduction='mean')
+    filenames = []
     for idx, frame in enumerate(tqdm(frames)):
         # read gt
         if "Synthetic4Relight" in data_root:
@@ -514,7 +515,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             data_root2 = data_root.replace("blender_LDR", "ground_truth")
         else:
             albedo_path = frame["file_path"].replace("rgba", "albedo") + ".png"
-
+        filenames.append(frame["file_path"])
         resolution = 2
         match = find_matching_file(os.path.join(data_root, 'albedo'), albedo_path)
         albedo_img = Image.open(os.path.join(data_root, 'albedo', match))
@@ -542,7 +543,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
 
-        print('!!!! ', albedo_gt.shape, mask_3d.shape)
+        #print('!!!! ', albedo_gt.shape, mask_3d.shape)
 
         albedo_gt[~mask_3d] = 0
         albedo_gt = torch.from_numpy(albedo_gt).cuda() / 255.0  # [H, W, 3]
@@ -563,7 +564,9 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     albedo_map_all = torch.cat(reconstructed_albedo_list, dim=0)
     # single_channel_ratio = (gt_albedo_all / albedo_map_all.clamp(min=1e-6))[..., 0].median()  # [1]
     three_channel_ratio, _ = (gt_albedo_all / albedo_map_all.clamp(min=1e-6)).median(dim=0)  # [3]
-    print(torch.unique(three_channel_ratio))
+    #print(torch.unique(three_channel_ratio))
+
+    print(filenames)
 
     for idx, (mask, albedo_map, albedo_gt) in enumerate(tqdm(zip(masks, albedo_maps, albedo_gts))):
         roughmse =(albedo_map - albedo_gt) ** 2  # 平方误差
@@ -571,7 +574,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         mse_loss += masked_diff.mean()
         #three_channel_ratio = (albedo_map / albedo_map.clamp_min(1e-6)).median(dim=0).values#.tolist()
         #print(three_channel_ratio)
-        print(albedo_map.shape, three_channel_ratio.shape)
+        #print(albedo_map.shape, three_channel_ratio.shape)
         albedo_map *= three_channel_ratio
         # albedo_map[mask] *= single_channel_ratio
         albedo_map = albedo_map.permute(2, 0, 1)  # [3, H, W]
