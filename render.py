@@ -351,7 +351,7 @@ def render_set(
             occlusion_img = to_pil(occlusion)
             torchvision.utils.save_image((normal_map + 1) / 2, os.path.join(normals_path, f"{idx:05d}_normal.png"))
 
-            print('!!! ', view.file_name)
+            print('!!! ', view.image_name)
 
             occlusion_img.save(os.path.join(pbr_path, f"{idx:05d}_occlusion.png"))
             torchvision.utils.save_image(brdf_map, os.path.join(pbr_path, f"{idx:05d}_brdf.png"))
