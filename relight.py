@@ -179,7 +179,7 @@ def render_set(
         depth_img = (depth_img * 255).astype(np.uint8)
         normal_map = rendering_result["normal_map"]
         normal_mask = rendering_result["normal_mask"]
-        occlusion = rendering_result["occlusion_map"].permute(1, 2, 0)
+        occlusion = rendering_result["occlusion_map"]
         print('!!! ', occlusion.shape)
         torchvision.utils.save_image(
             occlusion, os.path.join(relight_path, f"{idx:05d}_{light_name}_occlusion.png")
