@@ -126,12 +126,21 @@ class CubemapLight(nn.Module):
                                 torch.linspace(-1.0 + 1.0 / res[0], 1.0 - 1.0 / res[1], res[1], device='cuda'),
                                 indexing='ij')
 
+        #sintheta, costheta = torch.sin(gy * np.pi), torch.cos(gy * np.pi)
+        #sinphi, cosphi = torch.sin(gx * np.pi), torch.cos(gx * np.pi)
+
+        #reflvec = torch.stack(
+        #    (sintheta * sinphi, costheta, -sintheta * cosphi), dim=-1
+        #)  # [H, W, 3]
         sintheta, costheta = torch.sin(gy * np.pi), torch.cos(gy * np.pi)
         sinphi, cosphi = torch.sin(gx * np.pi), torch.cos(gx * np.pi)
+        reflvec = torch.stack((
+            sintheta * cosphi,
+            -sintheta * sinphi,
+            costheta,
+        ), dim=-1)
 
-        reflvec = torch.stack(
-            (sintheta * sinphi, costheta, -sintheta * cosphi), dim=-1
-        )  # [H, W, 3]
+
         print('export')
         color = dr.texture(
             self.base[None, ...],
