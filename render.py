@@ -42,6 +42,28 @@ def read_hdr(path: str) -> np.ndarray:
     rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
     return rgb
 
+def latlong_to_cubemap(latlong_map: torch.Tensor, res: List[int]) -> torch.Tensor:
+    cubemap = torch.zeros(
+        6, res[0], res[1], latlong_map.shape[-1], dtype=torch.float32, device="cuda"
+    )
+    for s in range(6):
+        gy, gx = torch.meshgrid(
+            torch.linspace(-1.0 + 1.0 / res[0], 1.0 - 1.0 / res[0], res[0], device="cuda"),
+            torch.linspace(-1.0 + 1.0 / res[1], 1.0 - 1.0 / res[1], res[1], device="cuda"),
+            indexing="ij",
+        )
+        v = F.normalize(cube_to_dir(s, gx, gy), p=2, dim=-1)
+
+        tu = torch.atan2(v[..., 0:1], -v[..., 2:3]) / (2 * np.pi) + 0.5
+        tv = torch.acos(torch.clamp(v[..., 1:2], min=-1, max=1)) / np.pi
+        texcoord = torch.cat((tu, tv), dim=-1)
+
+        cubemap[s, ...] = dr.texture(
+            latlong_map[None, ...], texcoord[None, ...], filter_mode="linear"
+        )[0]
+    return cubemap
+
+
 def linear_to_srgb(linear: Union[np.ndarray, torch.Tensor]) -> Union[np.ndarray, torch.Tensor]:
     if isinstance(linear, torch.Tensor):
         """Assumes `linear` is in [0, 1], see https://en.wikipedia.org/wiki/SRGB."""
