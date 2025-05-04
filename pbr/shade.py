@@ -141,7 +141,7 @@ def pbr_shading(
     # Diffuse lookup
     diffuse_light = dr.texture(
         light.diffuse[None, ...],  # [1, 6, 16, 16, 3]
-        normals.contiguous()@transform.T,  # [1, H, W, 3]
+        normals.contiguous(),#@transform.T,  # [1, H, W, 3]
         filter_mode="linear",
         boundary_mode="cube",
     )  # [1, H, W, 3]
