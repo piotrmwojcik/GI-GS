@@ -453,7 +453,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
 
         albedo_gt[~mask_3d] = 0
         albedo_gt = torch.from_numpy(albedo_gt).cuda() / 255.0  # [H, W, 3]
-        # albedo_gt = linear_to_srgb(albedo_gt)
+        albedo_gt = srgb_to_linear(albedo_gt)
         mask = torch.from_numpy(mask).cuda()  # [H, W]
         masks.append(mask)
         albedo_gts.append(albedo_gt)
