@@ -154,3 +154,4 @@ class CubemapLight(nn.Module):
             return color
         else:
             cv2.imwrite(filename, color.clamp(min=0.0).cpu().numpy()[..., ::-1])
+

@@ -87,6 +87,19 @@ def render_set(
     envmap_path = os.path.join(model_path, name, "envmap.png")
     torchvision.utils.save_image(envmap, envmap_path)
 
+    hdri_path = '/home/pwojcik/GI-GS/data/hook150_v2_statictimestep1/golden_bay_4k_32x16_rot330.hdr'
+    print(f"read hdri from {hdri_path}")
+    hdri = read_hdr(hdri_path)
+    hdri = torch.from_numpy(hdri).cuda()
+    res = 256
+    cubemap = CubemapLight(base_res=res).cuda()
+    cubemap.base.data = latlong_to_cubemap(hdri, [res, res])
+    cubemap.eval()
+    test_envmap = cubemap.export_envmap(return_img=True).permute(2, 0, 1).clamp(min=0.0, max=1.0)
+    envmap_path_test = os.path.join(model_path, name, "envmap_test.png")
+    torchvision.utils.save_image(test_envmap, envmap_path_test)
+
+
     render_path = os.path.join(model_path, name, f"ours_{iteration}", "renders")
     gts_path = os.path.join(model_path, name, f"ours_{iteration}", "gt")
     depths_path = os.path.join(model_path, name, f"ours_{iteration}", "depth")
