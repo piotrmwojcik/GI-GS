@@ -79,7 +79,7 @@ class CubemapLight(nn.Module):
         self.base = nn.Parameter(base)
         self.register_parameter("env_base", self.base)
 
-    def load_image(self, path, resizeWidth):
+    def load_image(self, path, resizeWidth=None):
         image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         if resizeWidth:
