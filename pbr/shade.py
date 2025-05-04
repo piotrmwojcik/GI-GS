@@ -160,7 +160,7 @@ def pbr_shading(
     fg_uv = torch.cat((NoV, roughness), dim=-1)  # [1, H, W, 2]
     fg_lookup = dr.texture(
         brdf_lut,  # [1, 256, 256, 2]
-        fg_uv.contiguous(),  # [1, H, W, 2]
+        (fg_uv@transform.T).contiguous(),  # [1, H, W, 2]
         filter_mode="linear",
         boundary_mode="clamp",
     )  # [1, H, W, 2]
@@ -173,7 +173,7 @@ def pbr_shading(
     miplevel = light.get_mip(roughness)  # [1, H, W, 1]
     spec = dr.texture(
         light.specular[0][None, ...],  # [1, 6, env_res, env_res, 3]
-        ref_dirs.contiguous(),#@transform.T,  # [1, H, W, 3]
+        ref_dirs.contiguous()@transform.T,  # [1, H, W, 3],
         mip=list(m[None, ...] for m in light.specular[1:]),
         mip_level_bias=miplevel[..., 0],  # [1, H, W]
         filter_mode="linear-mipmap-linear",
