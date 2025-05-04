@@ -43,6 +43,23 @@ def read_hdr(path: str) -> np.ndarray:
     rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
     return rgb
 
+def cube_to_dir(s: int, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+    if s == 0:
+        rx, ry, rz = torch.ones_like(x), -y, -x
+    elif s == 1:
+        rx, ry, rz = -torch.ones_like(x), -y, x
+    elif s == 2:
+        rx, ry, rz = x, torch.ones_like(x), y
+    elif s == 3:
+        rx, ry, rz = x, -torch.ones_like(x), -y
+    elif s == 4:
+        rx, ry, rz = x, -y, torch.ones_like(x)
+    elif s == 5:
+        rx, ry, rz = -x, -y, -torch.ones_like(x)
+    return torch.stack((rx, ry, rz), dim=-1)
+
+
+
 def latlong_to_cubemap(latlong_map: torch.Tensor, res: List[int]) -> torch.Tensor:
     cubemap = torch.zeros(
         6, res[0], res[1], latlong_map.shape[-1], dtype=torch.float32, device="cuda"
