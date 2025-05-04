@@ -207,7 +207,8 @@ def training(
     # NOTE: prepare for PBR
     brdf_lut = get_brdf_lut().cuda()
     envmap_dirs = get_envmap_dirs()
-    cubemap = CubemapLight(base_res=256).cuda()
+    hdri_path = '/home/pwojcik/GI-GS/data/jumpingjacks150_v3_tex_statictimestep75/golden_bay_4k_32x16_rot330.hdr'
+    cubemap = CubemapLight(base_res=256, path=hdri_path).cuda()
     cubemap.train()
     # print(torch.isnan(cubemap.base).any())
 
