@@ -31,6 +31,7 @@ def loadCam(args: GroupParams, id: int, cam_info: CameraInfo, resolution_scale: 
     orig_w, orig_h = cam_info.image.size
 
     if args.resolution in [1, 2, 4, 8]:
+        print('!!! ', args.resolution)
         resolution = round(orig_w / (resolution_scale * args.resolution)), round(
             orig_h / (resolution_scale * args.resolution)
         )
