@@ -541,6 +541,8 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
 
+        print('!!!! ', albedo_gt.shape, mask_3d.shape)
+
         albedo_gt[~mask_3d] = 0
         albedo_gt = torch.from_numpy(albedo_gt).cuda() / 255.0  # [H, W, 3]
         albedo_gt = srgb_to_linear(albedo_gt)
