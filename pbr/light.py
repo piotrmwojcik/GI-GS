@@ -123,7 +123,7 @@ class CubemapLight(nn.Module):
 
         #print('!!! ', envmap_train.shape, self.gt_envmap.shape)
 
-        print('!!! ', envmap_train[:, :H_half, :].shape, self.gt_envmap[:, :H_half, :].shape)
+        #print('!!! ', envmap_train[:, :H_half, :].shape, self.gt_envmap[:, :H_half, :].shape)
 
         upper_loss = F.mse_loss(envmap_train[:, :H_half, :], self.gt_envmap[:, :H_half, :]).item()
         lower_loss = F.mse_loss(envmap_train[:, H_half:, :], self.gt_envmap[:, :H_half, :]).item()
