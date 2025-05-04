@@ -140,7 +140,8 @@ def render_set(
 
     # build mip for environment light
     light.build_mips()
-    envmap = light.export_envmap(return_img=True).permute(2, 0, 1).clamp(min=0.0, max=1.0)
+    envmap = light.export_envmap(return_img=True).permute(2, 0, 1)
+    envmap = envmap / envmap.max()#.clamp(min=0.0, max=1.0)
     os.makedirs(os.path.join(model_path, name), exist_ok=True)
     envmap_path = os.path.join(model_path, name, "envmap.png")
     torchvision.utils.save_image(envmap, envmap_path)
