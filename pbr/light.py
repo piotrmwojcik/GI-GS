@@ -10,6 +10,31 @@ import torch.nn.functional as F
 from .renderutils import diffuse_cubemap, specular_cubemap
 
 
+def resizeImage(img, width, height, interpolation=cv2.INTER_CUBIC):
+    if img.shape[1] < width:  # up res
+        if interpolation == 'max_pooling':
+            return cv2.resize(img, (width, height), interpolation=cv2.INTER_CUBIC)
+        else:
+            return cv2.resize(img, (width, height), interpolation=interpolation)
+    if interpolation == 'max_pooling':  # down res, max pooling
+        try:
+            import skimage.measure
+            scaleFactor = int(float(img.shape[1]) / width)
+            factoredWidth = width * scaleFactor
+            img = cv2.resize(img, (factoredWidth, int(factoredWidth / 2)), interpolation=cv2.INTER_CUBIC)
+            blockSize = scaleFactor
+            r = skimage.measure.block_reduce(img[:, :, 0], (blockSize, blockSize), np.max)
+            g = skimage.measure.block_reduce(img[:, :, 1], (blockSize, blockSize), np.max)
+            b = skimage.measure.block_reduce(img[:, :, 2], (blockSize, blockSize), np.max)
+            img = np.dstack((np.dstack((r, g)), b)).astype(np.float32)
+            return img
+        except:
+            print("Failed to do max_pooling, using default")
+            return cv2.resize(img, (width, height), interpolation=cv2.INTER_CUBIC)
+    else:  # down res, using interpolation
+        return cv2.resize(img, (width, height), interpolation=interpolation)
+
+
 def cube_to_dir(s: int, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
     if s == 0:
         rx, ry, rz = torch.ones_like(x), -y, -x
@@ -52,6 +77,8 @@ class cubemap_mip(torch.autograd.Function):
                 boundary_mode="cube",
             )
         return out
+
+
 
 
 class CubemapLight(nn.Module):
