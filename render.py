@@ -305,8 +305,6 @@ def render_set(
                 background[:, None, None]
             )
 
-            
-            
 
             SSR = Gaussian_SSR(tanfovx, tanfovy, image_width, image_height, radius, bias, thick, delta, step, start)
             if metallic:
@@ -568,7 +566,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
 
     print(filenames)
 
-    for idx, (mask, albedo_map, albedo_gt) in enumerate(tqdm(zip(masks, albedo_maps, albedo_gts))):
+    for idx, (mask, albedo_map, albedo_gt, filename) in enumerate(tqdm(zip(masks, albedo_maps, albedo_gts, filenames))):
         roughmse =(albedo_map - albedo_gt) ** 2  # 平方误差
         masked_diff = roughmse[mask] 
         mse_loss += masked_diff.mean()
@@ -580,9 +578,9 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         albedo_map = albedo_map.permute(2, 0, 1)  # [3, H, W]
         albedo_gt = albedo_gt.permute(2, 0, 1)  # [3, H, W]
         print('Saving albedo to: ', pbr_path)
-        torchvision.utils.save_image(albedo_map, os.path.join(pbr_path, f"{idx:05d}_albedo_val.png"))
-        torchvision.utils.save_image(linear_to_srgb(albedo_map), os.path.join(pbr_path, f"{idx:05d}_albedo_srgb.png"))
-        torchvision.utils.save_image(albedo_gt, os.path.join(pbr_path, f"{idx:05d}_albedo_val_gt.png"))
+        torchvision.utils.save_image(albedo_map, os.path.join(pbr_path, f"{filename}_albedo_val.png"))
+        torchvision.utils.save_image(linear_to_srgb(albedo_map), os.path.join(pbr_path, f"{filename}_albedo_srgb.png"))
+        torchvision.utils.save_image(albedo_gt, os.path.join(pbr_path, f"{filename}_albedo_val_gt.png"))
         albedo_psnr_avg += get_psnr(albedo_gt, albedo_map).mean().double()
         albedo_ssim_avg += get_ssim(albedo_gt, albedo_map).mean().double()
         albedo_lpips_avg += lpips_fn(albedo_gt, albedo_map).mean().double()
