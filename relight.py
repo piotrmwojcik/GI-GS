@@ -265,7 +265,7 @@ def launch(
     print(f"read hdri from {hdri_path}")
     hdri = read_hdr(hdri_path)
     hdri = torch.from_numpy(hdri).cuda()
-    res = (16, 32)
+    res = 16
     cubemap = CubemapLight(base_res=res).cuda()
     cubemap.base.data = latlong_to_cubemap(hdri, [res, res])
     cubemap.eval()

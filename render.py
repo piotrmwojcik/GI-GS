@@ -399,8 +399,7 @@ def launch(
 ) -> None:
     gaussians = GaussianModel(dataset.sh_degree)
     scene = Scene(dataset, gaussians, shuffle=False)
-    cubemap = CubemapLight(base_res=(16, 32)).cuda()
-
+    cubemap = CubemapLight(base_res=16).cuda()
 
 
     checkpoint = torch.load(checkpoint_path)
