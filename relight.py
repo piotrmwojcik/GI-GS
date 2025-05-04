@@ -235,7 +235,7 @@ def render_set(
         render_rgb = render_rgb * alpha_mask
 
         torchvision.utils.save_image(
-            render_rgb, os.path.join(relight_path, f"{idx:05d}_{light_name}.png")
+            render_rgb, os.path.join(relight_path, f"{view.image_name}_{light_name}.png")
         )
 
 
