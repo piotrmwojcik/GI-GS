@@ -145,7 +145,7 @@ def pbr_shading(
         
 
     results["diffuse_light"] = diffuse_light[0]
-    diffuse_rgb = diffuse_light * albedo  # [1, H, W, 3]
+    diffuse_rgb = diffuse_light * (0.0 * albedo + 0.5)  # [1, H, W, 3]
     # irr = (1 - occlusion[None]) * irradiance[None] * albedo
 
     # specular
