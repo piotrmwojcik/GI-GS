@@ -185,7 +185,6 @@ def render_set(
             occlusion, os.path.join(relight_path, f"{idx:05d}_{light_name}_occlusion.png")
         )
 
-
         # normal from point cloud
         H, W = view.image_height, view.image_width
         c2w = torch.inverse(view.world_view_transform.T)  # [4, 4]
@@ -199,7 +198,7 @@ def render_set(
         albedo_map = rendering_result["albedo_map"]  # [3, H, W]
         roughness_map = rendering_result["roughness_map"]  # [1, H, W]
         metallic_map = rendering_result["metallic_map"]  # [1, H, W]
-        occlusion = torch.ones_like(roughness_map).permute(1, 2, 0)
+        #occlusion = torch.ones_like(roughness_map).permute(1, 2, 0)
 
         pbr_result = pbr_shading(
             light=light,
@@ -210,7 +209,7 @@ def render_set(
             roughness=roughness_map.permute(1, 2, 0),  # [H, W, 1]
             metallic=metallic_map.permute(1, 2, 0) if metallic else None,  # [H, W, 1]
             tone=tone,
-            occlusion=occlusion,
+            occlusion=occlusion.permute(1, 2, 0),
             gamma=gamma,
             brdf_lut=brdf_lut
         )
