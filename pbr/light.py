@@ -115,7 +115,7 @@ class CubemapLight(nn.Module):
     def export_envmap(
         self,
         filename: Optional[str] = None,
-        res: List[int] = [16, 32],
+        res: List[int] = [512, 1024],
         return_img: bool = False,
     ) -> Optional[torch.Tensor]:
         # cubemap_to_latlong

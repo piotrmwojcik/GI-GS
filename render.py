@@ -149,7 +149,7 @@ def render_set(
     print(f"read hdri from {hdri_path}")
     hdri = read_hdr(hdri_path)
     hdri = torch.from_numpy(hdri).cuda()
-    res = (16, 32)
+    res = 256
     cubemap = CubemapLight(base_res=res).cuda()
     cubemap.base.data = latlong_to_cubemap(hdri, [res, res])
     cubemap.eval()
@@ -399,7 +399,7 @@ def launch(
 ) -> None:
     gaussians = GaussianModel(dataset.sh_degree)
     scene = Scene(dataset, gaussians, shuffle=False)
-    cubemap = CubemapLight(base_res=16).cuda()
+    cubemap = CubemapLight(base_res=256).cuda()
 
 
     checkpoint = torch.load(checkpoint_path)
