@@ -515,19 +515,25 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         else:
             albedo_path = frame["file_path"].replace("rgba", "albedo") + ".png"
 
+        resolution = 2
+        target_w = round(orig_w / (resolution_scale * resolution))
+        target_h = round(orig_h / (resolution_scale * resolution))
+        target_size = (target_w, target_h)
+
         if "orb" in data_root:
             albedo_gt = np.array(Image.open(os.path.join(data_root2, 'golden_bay_4k_32x16_rot330', albedo_path)).resize((512, 512)))[..., :3]
         else:
             match = find_matching_file(os.path.join(data_root, 'albedo'), albedo_path)
-            #print('!!! ', match)
-            albedo_gt = np.array(Image.open(os.path.join(data_root, 'albedo', match),))[..., :3]
+            albedo_img = Image.open(os.path.join(data_root, 'albedo', match))
+            albedo_gt = np.array(albedo_img.resize(target_size))[..., :3]
         # mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
         if "orb" in data_root:
             mask = np.array(Image.open(os.path.join(data_root, 'golden_bay_4k_32x16_rot330', mask_path)).resize((512, 512))) > 0
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
         else:
-            mask = np.array(Image.open(os.path.join(data_root, 'golden_bay_4k_32x16_rot330', albedo_path)))[..., 3] > 0
+            mask_img = Image.open(os.path.join(data_root, 'golden_bay_4k_32x16_rot330', albedo_path))
+            mask = np.array(mask_img.resize(target_size))[..., 3] > 0
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
 
