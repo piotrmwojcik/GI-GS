@@ -7,6 +7,7 @@ import cv2
 import imageio.v2 as imageio
 import numpy as np
 import math
+import nvdiffrast.torch as dr
 from typing import Dict, List
 import torch
 import torch.nn.functional as F
