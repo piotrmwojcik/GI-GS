@@ -122,8 +122,8 @@ class CubemapLight(nn.Module):
         #    indexing="ij",
         #)
 
-        gy, gx = torch.meshgrid(torch.linspace(0.0 + 0.5 / H, 1.0 - 0.5 / H, H, device='cuda'),
-                                torch.linspace(-1.0 + 1.0 / W, 1.0 - 1.0 / W, W, device='cuda'),
+        gy, gx = torch.meshgrid(torch.linspace(0.0 + 0.5 / res[0], 1.0 - 0.5 / res[0], res[0], device='cuda'),
+                                torch.linspace(-1.0 + 1.0 / res[0], 1.0 - 1.0 / res[1], res[1], device='cuda'),
                                 indexing='ij')
 
         sintheta, costheta = torch.sin(gy * np.pi), torch.cos(gy * np.pi)
