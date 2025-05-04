@@ -448,6 +448,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             albedo_gt = np.array(Image.open(os.path.join(data_root2, 'golden_bay_4k_32x16_rot330', albedo_path)).resize((512, 512)))[..., :3]
         else:
             match = find_matching_file(os.path.join(data_root, 'albedo', albedo_path), albedo_path)
+            print('!!! ', match)
             albedo_gt = np.array(Image.open(match))[..., :3]
         # mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
         if "orb" in data_root:
