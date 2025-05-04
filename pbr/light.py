@@ -98,7 +98,7 @@ class CubemapLight(nn.Module):
         super(CubemapLight, self).__init__()
         self.mtx = None
         self.path = path
-        self.gt_envmap = self.load_envmap(path, 1024)
+        self.gt_envmap = self.load_envmap(path, 1024).permute(1, 2, 0)
         base = (
             torch.rand(6, base_res, base_res, 3, dtype=torch.float32, device="cuda") * scale + bias
         )
@@ -112,7 +112,7 @@ class CubemapLight(nn.Module):
         if resizeWidth:
             image = resizeImage(image, resizeWidth, int(resizeWidth/2), cv2.INTER_AREA)
         env_map_torch = torch.tensor(image, dtype=torch.float32, device='cuda', requires_grad=False)
-        env_map_torch = env_map_torch.permute(2, 0, 1).unsqueeze(0) # [1, 3, H, W]
+        env_map_torch = env_map_torch.permute(2, 0, 1) # [1, 3, H, W]
         return env_map_torch
 
     def split_envmap_loss(self):
@@ -121,7 +121,7 @@ class CubemapLight(nn.Module):
         H = envmap_train.shape[2]  # Get height, [1, C, H, W]
         H_half = H // 2  # Midpoint for splitting
 
-        print('!!! ', envmap_train.shape, self.gt_envmap.shape)
+        #print('!!! ', envmap_train.shape, self.gt_envmap.shape)
 
         upper_loss = F.mse_loss(envmap_train[:, :H_half, :], self.gt_envmap[:, :H_half, :]).item()
         lower_loss = F.mse_loss(envmap_train[:, H_half:, :], self.gt_envmap[:, :H_half, :]).item()
