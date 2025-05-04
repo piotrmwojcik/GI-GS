@@ -132,6 +132,7 @@ class CubemapLight(nn.Module):
         reflvec = torch.stack(
             (sintheta * sinphi, costheta, -sintheta * cosphi), dim=-1
         )  # [H, W, 3]
+        print('export')
         color = dr.texture(
             self.base[None, ...],
             reflvec[None, ...].contiguous(),
