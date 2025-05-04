@@ -56,7 +56,7 @@ class cubemap_mip(torch.autograd.Function):
 
 class CubemapLight(nn.Module):
     # for nvdiffrec
-    LIGHT_MIN_RES = 16
+    LIGHT_MIN_RES = 8
 
     MIN_ROUGHNESS = 0.08
     MAX_ROUGHNESS = 0.5
