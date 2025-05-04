@@ -25,6 +25,22 @@ from utils.general_utils import safe_state
 from utils.image_utils import viridis_cmap, psnr as get_psnr
 from utils.loss_utils import ssim as get_ssim
 
+
+def read_hdr(path: str) -> np.ndarray:
+    """Reads an HDR map from disk.
+
+    Args:
+        path (str): Path to the .hdr file.
+
+    Returns:
+        numpy.ndarray: Loaded (float) HDR map with RGB channels in order.
+    """
+    with open(path, "rb") as h:
+        buffer_ = np.frombuffer(h.read(), np.uint8)
+    bgr = cv2.imdecode(buffer_, cv2.IMREAD_UNCHANGED)
+    rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
+    return rgb
+
 def linear_to_srgb(linear: Union[np.ndarray, torch.Tensor]) -> Union[np.ndarray, torch.Tensor]:
     if isinstance(linear, torch.Tensor):
         """Assumes `linear` is in [0, 1], see https://en.wikipedia.org/wiki/SRGB."""
