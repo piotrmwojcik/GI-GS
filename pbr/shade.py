@@ -156,11 +156,11 @@ def pbr_shading(
     # irr = (1 - occlusion[None]) * irradiance[None] * albedo
 
     # specular
-    NoV = saturate_dot(normals, view_dirs)  # [1, H, W, 1]
+    NoV = saturate_dot(normals@transform.T, view_dirs@transform.T)  # [1, H, W, 1]
     fg_uv = torch.cat((NoV, roughness), dim=-1)  # [1, H, W, 2]
     fg_lookup = dr.texture(
         brdf_lut,  # [1, 256, 256, 2]
-        (fg_uv@transform.T).contiguous(),  # [1, H, W, 2]
+        fg_uv.contiguous(),  # [1, H, W, 2]
         filter_mode="linear",
         boundary_mode="clamp",
     )  # [1, H, W, 2]
