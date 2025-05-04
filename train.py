@@ -207,7 +207,7 @@ def training(
     # NOTE: prepare for PBR
     brdf_lut = get_brdf_lut().cuda()
     envmap_dirs = get_envmap_dirs()
-    cubemap = CubemapLight(base_res=256).cuda()
+    cubemap = CubemapLight(base_res=(16, 32)).cuda()
     cubemap.train()
     # print(torch.isnan(cubemap.base).any())
 
