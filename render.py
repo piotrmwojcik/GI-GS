@@ -2,6 +2,7 @@ import os
 import json
 from argparse import ArgumentParser
 from typing import Dict, Optional
+import cv2
 
 import imageio.v2 as imageio
 import numpy as np
