@@ -399,6 +399,13 @@ def launch(
             )
 
 
+def find_matching_file(folder, prefix_file):
+    prefix = os.path.splitext(prefix_file)[0]  # 'r_0010' from 'r_0010.png'
+    for f in os.listdir(folder):
+        if f.startswith(prefix) and f.endswith('.png') and f != prefix_file:
+            return f
+    return None
+
 def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     # only for TensoIR synthetic
     if name == "train":
@@ -440,8 +447,8 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         if "orb" in data_root:
             albedo_gt = np.array(Image.open(os.path.join(data_root2, 'golden_bay_4k_32x16_rot330', albedo_path)).resize((512, 512)))[..., :3]
         else:
-            print('!!! ', os.path.join(data_root, 'albedo', albedo_path))
-            albedo_gt = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., :3]
+            match = find_matching_file(os.path.join(data_root, 'albedo', albedo_path), prefix_filename)
+            albedo_gt = np.array(Image.open(match))[..., :3]
         # mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
         if "orb" in data_root:
             mask = np.array(Image.open(os.path.join(data_root, 'golden_bay_4k_32x16_rot330', mask_path)).resize((512, 512))) > 0
