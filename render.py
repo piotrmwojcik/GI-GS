@@ -578,6 +578,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         albedo_gt = albedo_gt.permute(2, 0, 1)  # [3, H, W]
         print('Saving albedo to: ', pbr_path)
         torchvision.utils.save_image(albedo_map, os.path.join(pbr_path, f"{idx:05d}_albedo_val.png"))
+        torchvision.utils.save_image(linear_to_srgb(albedo_map), os.path.join(pbr_path, f"{idx:05d}_albedo_srgb.png"))
         torchvision.utils.save_image(albedo_gt, os.path.join(pbr_path, f"{idx:05d}_albedo_val_gt.png"))
         albedo_psnr_avg += get_psnr(albedo_gt, albedo_map).mean().double()
         albedo_ssim_avg += get_ssim(albedo_gt, albedo_map).mean().double()
