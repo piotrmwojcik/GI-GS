@@ -121,27 +121,19 @@ class CubemapLight(nn.Module):
         #    torch.linspace(-1.0 + 1.0 / res[1], 1.0 - 1.0 / res[1], res[1], device="cuda"),
         #    indexing="ij",
         #)
+        # cubemap_to_latlong
+        gy, gx = torch.meshgrid(
+            torch.linspace(0.0 + 1.0 / res[0], 1.0 - 1.0 / res[0], res[0], device="cuda"),
+            torch.linspace(-1.0 + 1.0 / res[1], 1.0 - 1.0 / res[1], res[1], device="cuda"),
+            indexing="ij",
+        )
 
-        gy, gx = torch.meshgrid(torch.linspace(0.0 + 0.5 / res[0], 1.0 - 0.5 / res[0], res[0], device='cuda'),
-                                torch.linspace(-1.0 + 1.0 / res[0], 1.0 - 1.0 / res[1], res[1], device='cuda'),
-                                indexing='ij')
-
-        #sintheta, costheta = torch.sin(gy * np.pi), torch.cos(gy * np.pi)
-        #sinphi, cosphi = torch.sin(gx * np.pi), torch.cos(gx * np.pi)
-
-        #reflvec = torch.stack(
-        #    (sintheta * sinphi, costheta, -sintheta * cosphi), dim=-1
-        #)  # [H, W, 3]
         sintheta, costheta = torch.sin(gy * np.pi), torch.cos(gy * np.pi)
         sinphi, cosphi = torch.sin(gx * np.pi), torch.cos(gx * np.pi)
-        reflvec = torch.stack((
-            sintheta * cosphi,
-            -sintheta * sinphi,
-            costheta,
-        ), dim=-1)
 
-
-        print('export')
+        reflvec = torch.stack(
+            (sintheta * sinphi, costheta, -sintheta * cosphi), dim=-1
+        )  # [H, W, 3]
         color = dr.texture(
             self.base[None, ...],
             reflvec[None, ...].contiguous(),
@@ -154,4 +146,3 @@ class CubemapLight(nn.Module):
             return color
         else:
             cv2.imwrite(filename, color.clamp(min=0.0).cpu().numpy()[..., ::-1])
-
