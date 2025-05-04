@@ -70,7 +70,7 @@ class CubemapLight(nn.Module):
         super(CubemapLight, self).__init__()
         self.mtx = None
         base = (
-            torch.rand(6, base_res, base_res, 3, dtype=torch.float32, device="cuda") * scale + bias
+            torch.rand(6, base_res[0], base_res[1], 3, dtype=torch.float32, device="cuda") * scale + bias
         )
 
         # print(torch.isnan(base).any())
