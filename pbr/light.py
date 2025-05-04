@@ -71,8 +71,7 @@ class CubemapLight(nn.Module):
         super(CubemapLight, self).__init__()
         self.mtx = None
         self.path = path
-        self.gt_envmap = self.load_image(path)
-        print('!!!! ', self.gt_envmap.shape)
+        self.gt_envmap = self.load_image(path, resizeWidth=1024)
         base = (
             torch.rand(6, base_res, base_res, 3, dtype=torch.float32, device="cuda") * scale + bias
         )
@@ -80,7 +79,7 @@ class CubemapLight(nn.Module):
         self.base = nn.Parameter(base)
         self.register_parameter("env_base", self.base)
 
-    def load_image(self, path, resizeWidth=None):
+    def load_image(self, path, resizeWidth):
         image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         if resizeWidth:
