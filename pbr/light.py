@@ -63,7 +63,7 @@ class CubemapLight(nn.Module):
 
     def __init__(
         self,
-        base_res: int = 512,
+        base_res: int = (16, 32),
         scale: float = 0.5,
         bias: float = 0.25,
     ) -> None:
@@ -112,7 +112,7 @@ class CubemapLight(nn.Module):
     def export_envmap(
         self,
         filename: Optional[str] = None,
-        res: List[int] = [512, 1024],
+        res: List[int] = [16, 32],
         return_img: bool = False,
     ) -> Optional[torch.Tensor]:
         # cubemap_to_latlong
