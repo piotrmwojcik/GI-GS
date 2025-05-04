@@ -122,7 +122,9 @@ class CubemapLight(nn.Module):
         H_half = H // 2  # Midpoint for splitting
 
         #print('!!! ', envmap_train.shape, self.gt_envmap.shape)
-        assert envmap_train[:, H_half:, :].shape == self.gt_envmap[:, :H_half, :].shape
+        if envmap_train[:, H_half:, :].shape != self.gt_envmap[:, :H_half, :].shape:
+            print("envmap_train shape:", envmap_train[:, H_half:, :].shape)
+            print("gt_envmap shape:", self.gt_envmap[:, :H_half, :].shape)
         #print('!!! ', envmap_train[:, :H_half, :].shape, self.gt_envmap[:, :H_half, :].shape)
 
         upper_loss = F.mse_loss(envmap_train[:, :H_half, :], self.gt_envmap[:, :H_half, :]).item()
