@@ -180,6 +180,7 @@ def render_set(
         normal_map = rendering_result["normal_map"]
         normal_mask = rendering_result["normal_mask"]
         occlusion = rendering_result["occlusion_map"].permute(1, 2, 0)
+        print('!!! ', occlusion.shape)
         torchvision.utils.save_image(
             occlusion, os.path.join(relight_path, f"{idx:05d}_{light_name}_occlusion.png")
         )
