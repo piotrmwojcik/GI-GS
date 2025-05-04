@@ -459,7 +459,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         albedo_gts.append(albedo_gt)
         gt_albedo_list.append(albedo_gt[mask])
         # read prediction
-        albedo_map = np.array(Image.open(os.path.join(pbr_dir, f"{idx:05}_roughness.png")))[..., :3]
+        albedo_map = np.array(Image.open(os.path.join(pbr_dir, f"{idx:05}_albedo.png")))[..., :3]
         albedo_map[~mask_3d] = 0
         # H, W3, _ = brdf_map.shape
         # albedo_map = brdf_map[:, : (W3 // 3), :]  # [H, W, 3]
