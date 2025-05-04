@@ -516,16 +516,20 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             albedo_path = frame["file_path"].replace("rgba", "albedo") + ".png"
 
         resolution = 2
-        target_w = round(orig_w / (resolution_scale * resolution))
-        target_h = round(orig_h / (resolution_scale * resolution))
+        match = find_matching_file(os.path.join(data_root, 'albedo'), albedo_path)
+        albedo_img = Image.open(os.path.join(data_root, 'albedo', match))
+        albedo_gt = np.array(albedo_img)[..., :3]
+
+        orig_h, orig_w = albedo_gt.shape[:2]
+        target_w = round(orig_w / (1.0 * resolution))
+        target_h = round(orig_h / (1.0 * resolution))
         target_size = (target_w, target_h)
 
         if "orb" in data_root:
             albedo_gt = np.array(Image.open(os.path.join(data_root2, 'golden_bay_4k_32x16_rot330', albedo_path)).resize((512, 512)))[..., :3]
         else:
             match = find_matching_file(os.path.join(data_root, 'albedo'), albedo_path)
-            albedo_img = Image.open(os.path.join(data_root, 'albedo', match))
-            albedo_gt = np.array(albedo_img.resize(target_size))[..., :3]
+            albedo_gt = np.array(Image.open(os.path.join(data_root, 'albedo', match),))[..., :3]
         # mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
         if "orb" in data_root:
             mask = np.array(Image.open(os.path.join(data_root, 'golden_bay_4k_32x16_rot330', mask_path)).resize((512, 512))) > 0
