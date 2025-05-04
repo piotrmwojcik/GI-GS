@@ -131,10 +131,17 @@ def pbr_shading(
         2.0 * (normals * view_dirs).sum(-1, keepdims=True).clamp(min=0.0) * normals - view_dirs
     )  # [1, H, W, 3]
 
+    transform = torch.tensor([
+        [0, -1, 0],
+        [0, 0, 1],
+        [-1, 0, 0]
+    ], dtype=torch.float32, device="cuda")
+
+
     # Diffuse lookup
     diffuse_light = dr.texture(
         light.diffuse[None, ...],  # [1, 6, 16, 16, 3]
-        normals.contiguous(),  # [1, H, W, 3]
+        normals.contiguous()@transform.T,  # [1, H, W, 3]
         filter_mode="linear",
         boundary_mode="cube",
     )  # [1, H, W, 3]
@@ -166,7 +173,7 @@ def pbr_shading(
     miplevel = light.get_mip(roughness)  # [1, H, W, 1]
     spec = dr.texture(
         light.specular[0][None, ...],  # [1, 6, env_res, env_res, 3]
-        ref_dirs.contiguous(),  # [1, H, W, 3]
+        ref_dirs.contiguous(),#@transform.T,  # [1, H, W, 3]
         mip=list(m[None, ...] for m in light.specular[1:]),
         mip_level_bias=miplevel[..., 0],  # [1, H, W]
         filter_mode="linear-mipmap-linear",
