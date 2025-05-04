@@ -481,7 +481,6 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     three_channel_ratio, _ = (gt_albedo_all / albedo_map_all.clamp(min=1e-6)).median(dim=0)  # [3]
     print(torch.unique(three_channel_ratio))
 
-
     for idx, (mask, albedo_map, albedo_gt) in enumerate(tqdm(zip(masks, albedo_maps, albedo_gts))):
         roughmse =(albedo_map - albedo_gt) ** 2  # 平方误差
         masked_diff = roughmse[mask] 
