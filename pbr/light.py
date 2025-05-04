@@ -85,7 +85,7 @@ class CubemapLight(nn.Module):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         if resizeWidth:
             image = resizeImage(image, resizeWidth, int(resizeWidth/2), cv2.INTER_AREA)
-        env_map_torch = torch.tensor(image, dtype=torch.float32, device=self.device, requires_grad=False)
+        env_map_torch = torch.tensor(image, dtype=torch.float32, device='cuda', requires_grad=False)
         env_map_torch = env_map_torch.permute(2, 0, 1).unsqueeze(0) # [1, 3, H, W]
         return env_map_torch
 
