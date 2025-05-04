@@ -56,7 +56,7 @@ class cubemap_mip(torch.autograd.Function):
 
 class CubemapLight(nn.Module):
     # for nvdiffrec
-    LIGHT_MIN_RES = 8
+    LIGHT_MIN_RES = 16
 
     MIN_ROUGHNESS = 0.08
     MAX_ROUGHNESS = 0.5
@@ -98,7 +98,10 @@ class CubemapLight(nn.Module):
     def build_mips(self, cutoff: float = 0.99) -> None:
         self.specular = [self.base]
         while self.specular[-1].shape[1] > self.LIGHT_MIN_RES:
+            print('add specular ', self.specular[-1])
             self.specular += [cubemap_mip.apply(self.specular[-1])]
+
+        print('self specular: ', len(self.specular), self.specular)
 
         self.diffuse = diffuse_cubemap(self.specular[-1])
 
