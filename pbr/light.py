@@ -118,7 +118,7 @@ class CubemapLight(nn.Module):
     def split_envmap_loss(self):
         envmap_train = self.export_envmap(return_img=True)
 
-        H = envmap_train.shape[2]  # Get height, [C, H, W]
+        H = envmap_train.shape[1]  # Get height, [C, H, W]
         H_half = H // 2  # Midpoint for splitting
 
         #print('!!! ', envmap_train.shape, self.gt_envmap.shape)
