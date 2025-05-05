@@ -93,12 +93,13 @@ class CubemapLight(nn.Module):
         base_res: int = 16,
         scale: float = 0.5,
         bias: float = 0.25,
-        path = ''
+        path = None
     ) -> None:
         super(CubemapLight, self).__init__()
         self.mtx = None
         self.path = path
-        self.gt_envmap = self.load_envmap(path, 1024).permute(1, 2, 0)
+        if path is not None:
+            self.gt_envmap = self.load_envmap(path, 1024).permute(1, 2, 0)
         base = (
             torch.rand(6, base_res, base_res, 3, dtype=torch.float32, device="cuda") * scale + bias
         )
