@@ -313,7 +313,7 @@ def training(
         gt_image = viewpoint_cam.original_image[0:3, :, :].cuda()
         gt_image = (gt_image * alpha_mask + background[:, None, None] * (1.0 - alpha_mask)).clamp(0.0, 1.0)
         
-        loss: torch.Tensor = 0.00005 * cubemap.split_envmap_loss()[1]
+        loss: torch.Tensor
         Ll1 = F.l1_loss(image, gt_image)
 
         normal_loss = 0.0
@@ -383,7 +383,7 @@ def training(
             IRR = kornia.filters.median_blur(IRR[None, ...], (3, 3))[0]
             render_rgb = render_direct + IRR
             pbr_render_loss = l1_loss(render_rgb, gt_image)
-            loss = pbr_render_loss
+            loss = pbr_render_loss + 0.00005 * cubemap.split_envmap_loss()[1]
 
             ### BRDF loss
             if (normal_mask == 0).sum() > 0:
