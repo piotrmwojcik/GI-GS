@@ -12,9 +12,9 @@ datasets=(
 # Loop through each dataset and call the training script
 for d in "${datasets[@]}"; do
   for DATA_SUBDIR in \
-    chapel_day_4k_32x16_rot0 \
-    dam_wall_4k_32x16_rot90 \
-    golden_bay_4k_32x16_rot330
+    chapel_day_4k_1024x512_rot0 \
+    dam_wall_4k_1024x512_rot90 \
+    golden_bay_4k_1024x512_rot330
   do
     export DATA_SUBDIR
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR"
