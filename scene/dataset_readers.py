@@ -244,7 +244,9 @@ def readCamerasFromTransforms(
         R = np.transpose(w2c[:3, :3])  # R is stored transposed due to 'glm' in CUDA code
         T = w2c[:3, 3]
 
-        image_path = os.path.join(path, 'golden_bay_4k_32x16_rot330', os.path.basename(cam_name))
+        golden_bay_env = os.environ.get("DATA_SUBDIR", "")
+
+        image_path = os.path.join(path, golden_bay_env, os.path.basename(cam_name))
         image_name = Path(cam_name).stem
         image = Image.open(image_path)
 
