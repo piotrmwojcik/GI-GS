@@ -19,7 +19,7 @@ for d in "${datasets[@]}"; do
     export DATA_SUBDIR
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR"
 
-    python train.py -m outputs/"$d" -s data/"$d" \
+    python train.py -m outputs/"$d"/$DATA_SUBDIR -s data/"$d" \
       --iterations 35000 --eval --gamma --radius 0.8 \
       --bias 0.01 --thick 0.05 --delta 0.0625 --step 16 \
       --start 64 --indirect --resolution 2
