@@ -22,6 +22,6 @@ for d in "${datasets[@]}"; do
     python train.py -m outputs/"$d" -s data/"$d" \
       --iterations 35000 --eval --gamma --radius 0.8 \
       --bias 0.01 --thick 0.05 --delta 0.0625 --step 16 \
-      --start 64 --indirect
+      --start 64 --indirect --resolution 2
   done
 done
