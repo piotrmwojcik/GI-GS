@@ -383,7 +383,7 @@ def training(
             IRR = kornia.filters.median_blur(IRR[None, ...], (3, 3))[0]
             render_rgb = render_direct + IRR
             pbr_render_loss = l1_loss(render_rgb, gt_image)
-            loss = pbr_render_loss + 0.00005 * cubemap.split_envmap_loss()[1]
+            loss = pbr_render_loss #+ 0.00005 * cubemap.split_envmap_loss()[1]
 
             ### BRDF loss
             if (normal_mask == 0).sum() > 0:
