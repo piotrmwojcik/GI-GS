@@ -2,11 +2,11 @@
 
 # List of dataset names
 datasets=(
-    hook150_v3_transl_statictimestep1
-    jumpingjacks150_v3_tex_statictimestep75
-    mouse150_v2_transl_statictimestep1
-    spheres_cube_dataset_v5_statictimestep1
-    standup150_v3_statictimestep75
+    hook150_v4_spec_statictimestep1
+    jumpingjacks150_v34_spec_statictimestep75
+    mouse150_v3_spec_statictimestep1
+    spheres_cube_dataset_v6_spec_statictimestep1
+    standup150_v4_spec_statictimestep75
 )
 
 # Loop through each dataset and call the training script
