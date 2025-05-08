@@ -152,6 +152,7 @@ class CubemapLight(nn.Module):
         )
 
     def build_mips(self, cutoff: float = 0.99) -> None:
+        print('####### LOG: BUILDING MIP MAP ######')
         self.specular = [self.base]
         while self.specular[-1].shape[1] > self.LIGHT_MIN_RES:
             #print('add specular ', self.specular[-1])
