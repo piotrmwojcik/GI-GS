@@ -572,6 +572,11 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     albedo_map_all = torch.cat(reconstructed_albedo_list, dim=0)
     # single_channel_ratio = (gt_albedo_all / albedo_map_all.clamp(min=1e-6))[..., 0].median()  # [1]
     three_channel_ratio, _ = (gt_albedo_all / albedo_map_all.clamp(min=1e-6)).median(dim=0)  # [3]
+    json_path = os.path.join(pbr_dir, f"albedo_ratio.json")
+
+    # Save to JSON
+    with open(json_path, 'w') as f:
+        json.dump({"three_channel_ratio": ratio_list.item()}, f, indent=4)
     #print(torch.unique(three_channel_ratio))
 
     print(filenames)
