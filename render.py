@@ -376,9 +376,9 @@ def render_set(
         lpips = lpips_avg / len(views)
         print(f"psnr_avg: {psnr}; ssim_avg: {ssim}; lpips_avg: {lpips}")
         results = {
-            "psnr_avg": psnr,
-            "ssim_avg": ssim,
-            "lpips_avg": lpips
+            "psnr_avg": psnr.item(),
+            "ssim_avg": ssim.item(),
+            "lpips_avg": lpips.item()
         }
         json_path = os.path.join(pbr_path, f"{view.image_name}_NVS.json")
         with open(json_path, "w") as f:
