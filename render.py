@@ -577,6 +577,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     print(filenames)
 
     for idx, (mask, albedo_map, albedo_gt, filename) in enumerate(tqdm(zip(masks, albedo_maps, albedo_gts, filenames))):
+        print(f"### shapes {albedo_map.shape} {albedo_gt.shape}")
         roughmse =(albedo_map - albedo_gt) ** 2  # 平方误差
         masked_diff = roughmse[mask] 
         mse_loss += masked_diff.mean()
