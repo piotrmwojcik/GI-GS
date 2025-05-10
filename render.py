@@ -375,6 +375,14 @@ def render_set(
         ssim = ssim_avg / len(views)
         lpips = lpips_avg / len(views)
         print(f"psnr_avg: {psnr}; ssim_avg: {ssim}; lpips_avg: {lpips}")
+        results = {
+            "psnr_avg": psnr,
+            "ssim_avg": ssim,
+            "lpips_avg": lpips
+        }
+        json_path = os.path.join(pbr_path, f"{view.image_name}_NVS.json")
+        with open(json_path, "w") as f:
+            json.dump(results, f, indent=4)
 
 
 @torch.no_grad()
