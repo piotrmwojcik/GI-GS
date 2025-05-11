@@ -19,7 +19,7 @@ for d in "${datasets[@]}"; do
     export DATA_SUBDIR
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR"
 
-    python render.py -m outputs/$d -s data/$d --checkpoint outputs/$d/$DATA_SUBDIR/chkpnt35000.pth --eval --skip_train --brdf_eval
+    python render.py -m outputs_diffuse/$d/$DATA_SUBDIR -s /net/tscratch/people/plgmarzol/Dynamic-2DGS-relightable/data/d-nerf-relight/"$d" --checkpoint outputs_diffuse/$d/$DATA_SUBDIR/chkpnt35000.pth --eval --skip_train --brdf_eval
 
   done
 done

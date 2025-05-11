@@ -524,6 +524,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         filenames.append(frame["file_path"])
         resolution = 2
         match = find_matching_file(os.path.join(data_root, 'albedo'), albedo_path)
+        #img_with_mask = Image.open(os.path.join(data_root, albedo_path))
         albedo_img = Image.open(os.path.join(data_root, 'albedo', match))
         albedo_gt = np.array(albedo_img)[..., :3]
 
@@ -547,6 +548,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
         else:
             mask_img = Image.open(os.path.join(data_root, light_name, albedo_path))
+            print('!!! ', os.path.join(data_root, light_name, albedo_path))
             mask = np.array(mask_img.resize(target_size))[..., 3] > 0
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
@@ -571,12 +573,15 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     gt_albedo_all = torch.cat(gt_albedo_list, dim=0)
     albedo_map_all = torch.cat(reconstructed_albedo_list, dim=0)
     # single_channel_ratio = (gt_albedo_all / albedo_map_all.clamp(min=1e-6))[..., 0].median()  # [1]
-    three_channel_ratio, _ = (gt_albedo_all / albedo_map_all.clamp(min=1e-6)).median(dim=0)  # [3]
-    json_path = os.path.join(pbr_dir, f"albedo_ratio.json")
+    three_channel_ratio, _ = (gt_albedo_all / albedo_map_all.clamp(min=1e-6)).median(dim=0)  # shape [3]
+
+    # Convert to list of floats
+    ratio_list = three_channel_ratio.cpu().tolist()
 
     # Save to JSON
+    json_path = os.path.join(pbr_dir, "albedo_ratio.json")
     with open(json_path, 'w') as f:
-        json.dump({"three_channel_ratio": ratio_list.item()}, f, indent=4)
+        json.dump({"three_channel_ratio": ratio_list}, f, indent=4)
     #print(torch.unique(three_channel_ratio))
 
     print(filenames)
