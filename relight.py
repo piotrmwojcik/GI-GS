@@ -194,6 +194,7 @@ def render_set(
             .reshape(H, W, 3)
         )  # [H, W, 3]
         alpha_mask = view.gt_alpha_mask.cuda()
+        print('!!! alpha_mask ', alpha_mask.shape)
 
         albedo_map = rendering_result["albedo_map"]  # [3, H, W]
         roughness_map = rendering_result["roughness_map"]  # [1, H, W]
