@@ -20,15 +20,16 @@ for d in "${datasets[@]}"; do
   for pair in "${pairs[@]}"; do
     read DATA_SUBDIR MAP_NAME <<< "$pair"
     export DATA_SUBDIR
+    export MAP_NAME
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR and MAP_NAME: $MAP_NAME"
 
     # Uncomment below to execute your actual command
-    # python relight.py \
-    #   -m outputs/"$d" \
-    #   -s datasets/nerf_real_360/"$d"/ \
-    #   --checkpoint outputs/"$d"/chkpnt40000.pth \
-    #   --hdri datasets/TensoIR/Environment_Maps/high_res_envmaps_2k/"$MAP_NAME".hdr \
-    #   --eval \
-    #   --gamma
+    python relight.py \
+      -m outputs/$d/$DATA_SUBDIR/reli_$MAP_NAME$ \
+      -s data/$d/ \
+      --checkpoint outputs/$d/chkpnt40000.pth \
+      --hdri outputs/$d/$DATA_SUBDIR/$MAP_NAME.hdr \
+      --eval \
+      --gamma
   done
 done
