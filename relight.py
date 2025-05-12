@@ -217,7 +217,7 @@ def render_set(
             normals=normal_map.permute(1, 2, 0),  # [H, W, 3]
             view_dirs=view_dirs,
             mask=normal_mask.permute(1, 2, 0),  # [H, W, 1]
-            albedo=(albedo_map).permute(1, 2, 0)*three_channel_ratio,  # [H, W, 3]
+            albedo=(albedo_map*three_channel_ratio[:, None, None]).permute(1, 2, 0),  # [H, W, 3]
             roughness=roughness_map.permute(1, 2, 0),  # [H, W, 1]
             metallic=metallic_map.permute(1, 2, 0) if metallic else None,  # [H, W, 1]
             tone=tone,
