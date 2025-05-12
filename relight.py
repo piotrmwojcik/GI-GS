@@ -194,12 +194,20 @@ def render_set(
             .reshape(H, W, 3)
         )  # [H, W, 3]
         alpha_mask = view.gt_alpha_mask.cuda()
-        print('!!! alpha_mask ', alpha_mask.shape)
+        print('!!! alpha_mask ', alpha_mask.shape, (alpha_mask > 0).sum())
 
         albedo_map = rendering_result["albedo_map"]  # [3, H, W]
         roughness_map = rendering_result["roughness_map"]  # [1, H, W]
         metallic_map = rendering_result["metallic_map"]  # [1, H, W]
         #occlusion = torch.ones_like(roughness_map).permute(1, 2, 0)
+
+        json_path = os.path.join(pbr_dir, "albedo_ratio.json")
+
+        with open(json_path, 'r') as f:
+            data_3ch = json.load(f)
+
+        # Convert list back to tensor
+        three_channel_ratio = torch.tensor(data_3ch["three_channel_ratio"])
 
         pbr_result = pbr_shading(
             light=light,
