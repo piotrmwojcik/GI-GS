@@ -200,7 +200,7 @@ def render_set(
         roughness_map = rendering_result["roughness_map"]  # [1, H, W]
         metallic_map = rendering_result["metallic_map"]  # [1, H, W]
         #occlusion = torch.ones_like(roughness_map).permute(1, 2, 0)
-        pbr_dir = os.path.join(model_path, name, f"ours_{iteration}", "pbr")
+        pbr_dir = os.path.join(model_path, 'test', f"ours_{iteration}", "pbr")
         json_path = os.path.join(pbr_dir, "albedo_ratio.json")
 
         with open(json_path, 'r') as f:
