@@ -27,8 +27,8 @@ for d in "${datasets[@]}"; do
     python relight.py \
       -m outputs_diffuse/$d/$DATA_SUBDIR/reli_$MAP_NAME \
       -s data/$d/ \
-      --checkpoint outputs/$d/chkpnt40000.pth \
-      --hdri outputs/$d/$DATA_SUBDIR/$MAP_NAME.hdr \
+      --checkpoint outputs_diffuse/$d/chkpnt40000.pth \
+      --hdri outputs_diffuse/$d/$DATA_SUBDIR/$MAP_NAME.hdr \
       --eval \
       --gamma
   done
