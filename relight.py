@@ -207,7 +207,7 @@ def render_set(
             data_3ch = json.load(f)
 
         # Convert list back to tensor
-        three_channel_ratio = torch.tensor(data_3ch["three_channel_ratio"])
+        three_channel_ratio = torch.tensor(data_3ch["three_channel_ratio"]).cuda()
         print(three_channel_ratio, three_channel_ratio.shape, albedo_map.shape)
 
 
