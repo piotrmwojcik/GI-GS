@@ -191,7 +191,7 @@ def render_set(
     lpips_fn = LPIPS(net="vgg").cuda()
 
     for idx, view in enumerate(tqdm(views, desc="Rendering progress")):
-        background = torch.tensor([0, 0, 0], dtype=torch.float32, device="cuda")
+        background = torch.tensor([1, 1, 1], dtype=torch.float32, device="cuda")
         background2 = torch.tensor([1, 1, 1], dtype=torch.float32, device="cuda")
         rendering_result = render(
             viewpoint_camera=view,
