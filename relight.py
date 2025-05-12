@@ -208,7 +208,9 @@ def render_set(
 
         # Convert list back to tensor
         three_channel_ratio = torch.tensor(data_3ch["three_channel_ratio"])
-        print(three_channel_ratio)
+        print(three_channel_ratio, three_channel_ratio.shape, albedo_map.shape)
+
+
 
         pbr_result = pbr_shading(
             light=light,
