@@ -28,7 +28,7 @@ for d in "${datasets[@]}"; do
       -m outputs_diffuse/$d/$DATA_SUBDIR/ \
       -s data/$d/ \
       --checkpoint outputs_diffuse/$d/chkpnt40000.pth \
-      --hdri outputs_diffuse/$d/$MAP_NAME.hdr \
+      --hdri data/$d/$MAP_NAME.hdr \
       --eval \
       --gamma
   done
