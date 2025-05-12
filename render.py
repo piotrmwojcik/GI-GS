@@ -611,6 +611,16 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     albedo_ssim = albedo_ssim_avg / len(frames)
     albedo_lpips = albedo_lpips_avg / len(frames)
     roughmse = mse_loss / len(frames)
+    metrics = {
+        "albedo_psnr": float(albedo_psnr.item()),
+        "albedo_ssim": float(albedo_ssim.item()),
+        "albedo_lpips": float(albedo_lpips.item())
+    }
+
+    # Save to JSON
+    json_path = os.path.join(pbr_dir, "albedo_metrics.json")
+    with open(json_path, 'w') as f:
+        json.dump(metrics, f, indent=4)
     print(f"albedo_psnr: {albedo_psnr} albedo_ssim: {albedo_ssim} albedo_lpips: {albedo_lpips}")
     print(f"roughmse: {roughmse}")
 
