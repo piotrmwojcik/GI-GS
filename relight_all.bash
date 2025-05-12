@@ -25,7 +25,7 @@ for d in "${datasets[@]}"; do
 
     # Uncomment below to execute your actual command
     python relight.py \
-      -m outputs_diffuse/$d/$DATA_SUBDIR/reli_$MAP_NAME \
+      -m outputs_diffuse/$d/$DATA_SUBDIR/ \
       -s data/$d/ \
       --checkpoint outputs_diffuse/$d/chkpnt40000.pth \
       --hdri outputs_diffuse/$d/$DATA_SUBDIR/$MAP_NAME.hdr \
