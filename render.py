@@ -148,7 +148,7 @@ def render_set(
     torchvision.utils.save_image(light.export_envmap(return_img=True).permute(2, 0, 1),
                                  os.path.join(model_path, name, "unscaled_envmap.png"))
 
-    hdri_path = '/home/pwojcik/GI-GS/data/hook150_v2_statictimestep1/golden_bay_4k_32x16_rot330.hdr'
+    hdri_path = '/home/pwojcik/GI-GS/data/hook150_v3_transl_statictimestep1/golden_bay_4k_32x16_rot330.hdr'
     print(f"read hdri from {hdri_path}")
     hdri = read_hdr(hdri_path)
     hdri = torch.from_numpy(hdri).cuda()
