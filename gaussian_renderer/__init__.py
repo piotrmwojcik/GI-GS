@@ -185,6 +185,11 @@ def render(
 
     normal_map = kornia.filters.median_blur(normal_map[None, ...], (3, 3))[0]
 
+    R = viewpoint_camera.world_view_transform[:3, :3]  # rotation only
+    normals_view = (rendered_normal.permute(1, 2, 0) @ R).permute(2, 0, 1)  # [H,W,3] @ [3,3] → [H,W,3]
+    normals_view = -normals_view
+
+
     out_normal_view = torch.where(
         torch.norm(out_normal_view, dim=0, keepdim=True) > 0,
         F.normalize(out_normal_view, dim=0, p=2),
@@ -204,7 +209,7 @@ def render(
         "depth_map": depth_map,
         "normal_map_from_depth": normal_map_from_depth,
         "normal_from_depth_mask": normal_from_depth_mask,
-        "normal_map": normal_map,
+        "normal_map": normals_view, # replaced normal map
         "normal_mask": normal_mask,
         "albedo_map": albedo_map,
         "roughness_map": roughness_map,
