@@ -141,7 +141,7 @@ def render_set(
     # build mip for environment light
     light.build_mips()
     envmap = light.export_envmap(return_img=True).permute(2, 0, 1)
-    hdr_np = envmap.copy().permute(1, 2, 0).cpu().numpy().astype(np.float32)  # H, W, C
+    hdr_np = envmap.clone().permute(1, 2, 0).cpu().numpy().astype(np.float32)  # H, W, C
 
     # Save as HDR image using OpenCV
     hdr_path = os.path.join(model_path, name, "envmap.exr")
