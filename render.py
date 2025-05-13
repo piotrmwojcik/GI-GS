@@ -145,7 +145,7 @@ def render_set(
 
     # Save as HDR image using OpenCV
     hdr_path = os.path.join(model_path, name, "envmap.exr")
-    print('!!! ', hdr_path, save_path)
+    print('!!! ', hdr_path)
     cv2.imwrite(hdr_path, cv2.cvtColor(hdr_np, cv2.COLOR_RGB2BGR))
     envmap = envmap / envmap.max()#.clamp(min=0.0, max=1.0)
     os.makedirs(os.path.join(model_path, name), exist_ok=True)
