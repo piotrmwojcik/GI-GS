@@ -145,6 +145,8 @@ def render_set(
     os.makedirs(os.path.join(model_path, name), exist_ok=True)
     envmap_path = os.path.join(model_path, name, "envmap.png")
     torchvision.utils.save_image(envmap, envmap_path)
+    torchvision.utils.save_image(light.export_envmap(return_img=True).permute(2, 0, 1),
+                                 os.path.join(model_path, name, "unscaled_envmap.png"))
 
     hdri_path = '/home/pwojcik/GI-GS/data/hook150_v2_statictimestep1/golden_bay_4k_32x16_rot330.hdr'
     print(f"read hdri from {hdri_path}")
