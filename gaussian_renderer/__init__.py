@@ -186,7 +186,7 @@ def render(
     normal_map = kornia.filters.median_blur(normal_map[None, ...], (3, 3))[0]
 
     R = viewpoint_camera.world_view_transform[:3, :3]  # rotation only
-    normals_view = (rendered_normal.permute(1, 2, 0) @ R).permute(2, 0, 1)  # [H,W,3] @ [3,3] → [H,W,3]
+    normals_view = (normal_map.permute(1, 2, 0) @ R).permute(2, 0, 1)  # [H,W,3] @ [3,3] → [H,W,3]
     normals_view = -normals_view
 
 
