@@ -141,6 +141,12 @@ def render_set(
     # build mip for environment light
     light.build_mips()
     envmap = light.export_envmap(return_img=True).permute(2, 0, 1)
+    hdr_np = envmap.copy().permute(1, 2, 0).cpu().numpy().astype(np.float32)  # H, W, C
+
+    # Save as HDR image using OpenCV
+    hdr_path = os.path.join(model_path, name, "envmap.exr")
+    print('!!! ', hdr_path, save_path)
+    cv2.imwrite(hdr_path, cv2.cvtColor(hdr_np, cv2.COLOR_RGB2BGR))
     envmap = envmap / envmap.max()#.clamp(min=0.0, max=1.0)
     os.makedirs(os.path.join(model_path, name), exist_ok=True)
     envmap_path = os.path.join(model_path, name, "envmap.png")
@@ -159,7 +165,6 @@ def render_set(
     test_envmap = cubemap.export_envmap(return_img=True).permute(2, 0, 1).clamp(min=0.0, max=1.0)
     envmap_path_test = os.path.join(model_path, name, "envmap_test.png")
     torchvision.utils.save_image(test_envmap, envmap_path_test)
-
 
     render_path = os.path.join(model_path, name, f"ours_{iteration}", "renders")
     gts_path = os.path.join(model_path, name, f"ours_{iteration}", "gt")
