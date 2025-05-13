@@ -482,6 +482,9 @@ class GaussianModel:
             ),
             axis=1,
         )
+
+        print(f'Load PLY from {path} {xyz.shape}')
+
         opacities = np.asarray(plydata.elements[0]["opacity"])[..., np.newaxis]
         normal = np.stack(
             (
