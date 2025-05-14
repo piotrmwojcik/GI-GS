@@ -20,13 +20,12 @@ for d in "${datasets[@]}"; do
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR"
 
     python render.py \
-    -m outputs_diffuse/"$d"/$DATA_SUBDIR \
+    -m outputs_diffuse_nogamma/"$d"/$DATA_SUBDIR \
     -s data/"$d" \
     --checkpoint outputs_diffuse_nogamma/"$d"/$DATA_SUBDIR/chkpnt35000.pth \
     --eval \
     --skip_train \
     --pbr \
-    --gamma \
     --indirect
   done
 done
