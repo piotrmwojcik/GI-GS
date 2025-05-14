@@ -38,7 +38,7 @@ if __name__ == "__main__":
     for light_name in light_name_list:
         print(f"evaluation {light_name}")
         if 'spheres' in dataset:
-            num_test = 10
+            num_test = 9
         else:
             num_test = 15
         psnr_avg = 0.0
