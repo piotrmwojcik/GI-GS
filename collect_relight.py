@@ -21,7 +21,6 @@ pairs = [
 base_dir = "relight"
 
 
-
 # Iterate over datasets and pairs
 for dataset in datasets:
     # Accumulators
@@ -53,10 +52,10 @@ for dataset in datasets:
             print(f"Error reading {json_path}: {e}")
 
     # Compute global averages
-    if count > 0:
-        print("\n✅ Global Averages Across All JSONs:")
-        print(f"psnr_avg:  {psnr_total / count:.4f}")
-        print(f"ssim_avg:  {ssim_total / count:.4f}")
-        print(f"lpips_avg: {lpips_total / count:.4f}")
-    else:
-        print("❌ No valid JSON files found.")
+if count > 0:
+    print("\n✅ Global Averages Across All JSONs:")
+    print(f"psnr_avg:  {psnr_total / count:.4f}")
+    print(f"ssim_avg:  {ssim_total / count:.4f}")
+    print(f"lpips_avg: {lpips_total / count:.4f}")
+else:
+    print("❌ No valid JSON files found.")
