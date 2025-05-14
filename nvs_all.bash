@@ -22,7 +22,7 @@ for d in "${datasets[@]}"; do
     python render.py \
     -m outputs_diffuse/"$d"/$DATA_SUBDIR \
     -s data/"$d" \
-    --checkpoint outputs_diffuse/$DATA_SUBDIR/chkpnt35000.pth \
+    --checkpoint outputs_diffuse/"$d"/$DATA_SUBDIR/chkpnt35000.pth \
     --eval \
     --skip_train \
     --pbr \
