@@ -21,6 +21,8 @@ for d in "${datasets[@]}"; do
     read DATA_SUBDIR MAP_NAME <<< "$pair"
     export DATA_SUBDIR
     export MAP_NAME
+    DATASET=$d
+    export DATASET
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR and MAP_NAME: $MAP_NAME"
 
     # Uncomment below to execute your actual command
