@@ -35,7 +35,7 @@ for d in "${datasets[@]}"; do
 
 
     python relight_eval.py \
-      --output_dir outputs_diffuse/$d/$DATA_SUBDIR/ours_None/relight/ \
+      --output_dir outputs_diffuse/$d/$DATA_SUBDIR/test/ours_None/relight/ \
       --gt_dir data/$d/
   done
 done
