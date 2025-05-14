@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     for light_name in light_name_list:
         print(f"evaluation {light_name}")
-        num_test = 200
+        num_test = 15
         psnr_avg = 0.0
         ssim_avg = 0.0
         lpips_avg = 0.0
