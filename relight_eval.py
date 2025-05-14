@@ -76,7 +76,7 @@ if __name__ == "__main__":
     }
 
     # Create output path
-    output_dir = os.path.join("relight", f"relight_FROM_{data_subdir}", f"relight_TO_{map_name}",)
+    output_dir = os.path.join("relight", dataset, f"relight_FROM_{data_subdir}", f"relight_TO_{map_name}",)
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir,  f"{map_name}.json")
     #os.makedirs(os.path.dirname(output_path), exist_ok=True)
