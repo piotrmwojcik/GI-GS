@@ -21,7 +21,7 @@ if __name__ == "__main__":
     parser.add_argument("--gt_dir", type=str, help="The path to the output directory that stores the relighting ground truth.")
     args = parser.parse_args()
 
-    light_name_list = ["bridge", "city", "fireplace", "forest", "night"]
+    light_name_list = ["small_harbour_sunset_4k_32x16_rot270"]
 
     psnr_all = 0.0
     ssim_all = 0.0
