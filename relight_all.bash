@@ -15,7 +15,6 @@ for d in "${datasets[@]}"; do
     "chapel_day_4k_32x16_rot0 golden_bay_4k_32x16_rot330"
     "dam_wall_4k_32x16_rot90 small_harbour_sunset_4k_32x16_rot270"
     "golden_bay_4k_32x16_rot330 dam_wall_4k_32x16_rot90"
-    "golden_bay_4k_32x16_rot330 chapel_day_4k_32x16_rot0"
   )
 
   for pair in "${pairs[@]}"; do
