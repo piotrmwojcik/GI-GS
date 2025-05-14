@@ -41,6 +41,7 @@ for dataset in datasets:
                 with open(json_file, 'r') as f:
                     data = json.load(f)
                     print(f"Loaded: {json_file}")
+                    print(data)
                     # Do something with `data` here
             except Exception as e:
                 print(f"Error reading {json_file}: {e}")
