@@ -7,7 +7,7 @@ datasets = (
     "hook150_v3_transl_statictimestep1",
     "jumpingjacks150_v3_tex_statictimestep75",
     "mouse150_v2_transl_statictimestep1",
-    "spheres_cube_dataset_v7_statictimestep1",
+    "spheres_cube_dataset_v5_statictimestep1",
     "standup150_v3_statictimestep75",
 )
 
