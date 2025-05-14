@@ -32,9 +32,9 @@ for dataset in datasets:
             print(f"Folder not found: {folder}")
             continue
 
-        json_files = list(folder.glob("albedo_metrics"))
+        json_files = list(folder.glob("*albedo_metrics*"))
         if not json_files:
-            print(f"No NVS JSON files in: {folder}")
+            print(f"No albedo JSON files in: {folder}")
             continue
 
         for json_file in json_files:
