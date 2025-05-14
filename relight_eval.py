@@ -4,6 +4,7 @@ from argparse import ArgumentParser
 import imageio.v2 as imageio
 import numpy as np
 import torch
+import os
 from tqdm import tqdm, trange
 from PIL import Image
 
@@ -21,11 +22,17 @@ if __name__ == "__main__":
     parser.add_argument("--gt_dir", type=str, help="The path to the output directory that stores the relighting ground truth.")
     args = parser.parse_args()
 
-    light_name_list = ["small_harbour_sunset_4k_32x16_rot270"]
+
 
     psnr_all = 0.0
     ssim_all = 0.0
     lpips_all = 0.0
+
+    data_subdir = os.environ.get("DATA_SUBDIR", "")
+    map_name = os.environ.get("MAP_NAME", "")
+    data_subdir = os.environ.get("DATA_SUBDIR", "")
+
+    light_name_list = [map_name]
 
     for light_name in light_name_list:
         print(f"evaluation {light_name}")
@@ -38,7 +45,7 @@ if __name__ == "__main__":
                 prediction = np.array(Image.open(os.path.join(args.output_dir, f"r_{(10*(idx+1)):04}_{light_name}.png")))[..., :3]  # [H, W, 3]
                 prediction = torch.from_numpy(prediction).cuda().permute(2, 0, 1) / 255.0  # [3, H, W]
                 print('!!!! ', done)
-                gt_img = np.array(Image.open(os.path.join(args.gt_dir, f"test_{idx:03}", f"rgba_{light_name}.png")))[..., :3]  # [H, W, 3]
+                gt_img = np.array(Image.open(os.path.join(f"/home/pwojcik/GI-GS/data/{data_subdir}/{map_name}/r_{(10*(idx+1)):04}.png")))[..., :3]  # [H, W, 3]
                 gt_img = torch.from_numpy(gt_img).cuda().permute(2, 0, 1) / 255.0  # [3, H, W]
                 psnr_avg += get_psnr(gt_img, prediction).mean().double()
                 ssim_avg += get_ssim(gt_img, prediction).mean().double()
