@@ -78,7 +78,7 @@ if __name__ == "__main__":
     # Create output path
     output_dir = os.path.join("relight", dataset, map_name)
     os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, f"relight_{map_name}.json")
+    output_path = os.path.join(output_dir, f"relight_FROM", f"relight_TO",  f"{map_name}.json")
 
     with open(output_path, "w") as f:
         json.dump(metrics, f, indent=4)
