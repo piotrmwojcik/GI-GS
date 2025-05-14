@@ -16,7 +16,6 @@ for d in "${datasets[@]}"; do
     dam_wall_4k_32x16_rot90 \
     golden_bay_4k_32x16_rot330
   do
-    DATASET = $d
     export DATA_SUBDIR
     export DATASET
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR"

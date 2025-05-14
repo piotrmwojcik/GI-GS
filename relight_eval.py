@@ -61,7 +61,23 @@ if __name__ == "__main__":
         psnr_all += psnr_avg / num_test
         ssim_all += ssim_avg / num_test
         lpips_all += lpips_avg / num_test
-    
+
+    import json
     print(f"psnr_avg: {psnr_all / len(light_name_list)}")
     print(f"ssim_avg: {ssim_all / len(light_name_list)}")
     print(f"lpips_avg: {lpips_all / len(light_name_list)}")
+    metrics = {
+        "psnr_avg": psnr_all / len(light_name_list),
+        "ssim_avg": ssim_all / len(light_name_list),
+        "lpips_avg": lpips_all / len(light_name_list),
+    }
+
+    # Create output path
+    output_dir = os.path.join("relight", dataset, map_name)
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, f"relight_{map_name}.json")
+
+    with open(output_path, "w") as f:
+        json.dump(metrics, f, indent=4)
+
+    print(f"Saved metrics to {output_path}")
