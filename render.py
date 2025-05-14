@@ -390,8 +390,8 @@ def render_set(
             "lpips_avg": lpips.item()
         }
         json_path = os.path.join(pbr_path, f"{view.image_name}_NVS.json")
-        #with open(json_path, "w") as f:
-        #    json.dump(results, f, indent=4)
+        with open(json_path, "w") as f:
+            json.dump(results, f, indent=4)
 
 
 @torch.no_grad()
