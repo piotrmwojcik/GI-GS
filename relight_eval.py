@@ -67,9 +67,9 @@ if __name__ == "__main__":
     print(f"ssim_avg: {ssim_all / len(light_name_list)}")
     print(f"lpips_avg: {lpips_all / len(light_name_list)}")
     metrics = {
-        "psnr_avg": psnr_all / len(light_name_list),
-        "ssim_avg": ssim_all / len(light_name_list),
-        "lpips_avg": lpips_all / len(light_name_list),
+        "psnr_avg": psnr_all.item() / len(light_name_list),
+        "ssim_avg": ssim_all.item() / len(light_name_list),
+        "lpips_avg": lpips_all.item() / len(light_name_list),
     }
 
     # Create output path
