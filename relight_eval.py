@@ -35,7 +35,7 @@ if __name__ == "__main__":
         lpips_avg = 0.0
         for idx in trange(num_test):
             with torch.no_grad():
-                prediction = np.array(Image.open(os.path.join(args.output_dir, f"{idx:05}_{light_name}.png")))[..., :3]  # [H, W, 3]
+                prediction = np.array(Image.open(os.path.join(args.output_dir, f"r_{idx:04}_{light_name}.png")))[..., :3]  # [H, W, 3]
                 prediction = torch.from_numpy(prediction).cuda().permute(2, 0, 1) / 255.0  # [3, H, W]
                 gt_img = np.array(Image.open(os.path.join(args.gt_dir, f"test_{idx:03}", f"rgba_{light_name}.png")))[..., :3]  # [H, W, 3]
                 gt_img = torch.from_numpy(gt_img).cuda().permute(2, 0, 1) / 255.0  # [3, H, W]
