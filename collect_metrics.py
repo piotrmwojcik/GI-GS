@@ -42,11 +42,11 @@ for dataset in datasets:
                 with open(json_file, 'r') as f:
                     data = json.load(f)
                     if data.get("albedo_psnr") is not None:
-                        global_psnr.append(data["psnr_avg"])
+                        global_psnr.append(data["albedo_psnr"])
                     if data.get("albedo_ssim") is not None:
-                        global_ssim.append(data["ssim_avg"])
+                        global_ssim.append(data["albedo_ssim"])
                     if data.get("albedo_lpips") is not None:
-                        global_lpips.append(data["lpips_avg"])
+                        global_lpips.append(data["albedo_lpips"])
             except Exception as e:
                 print(f"Error reading {json_file}: {e}")
 
