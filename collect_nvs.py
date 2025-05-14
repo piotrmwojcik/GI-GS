@@ -2,7 +2,7 @@ import os
 import json
 from pathlib import Path
 
-# List of datasets and map names
+# Datasets and map names
 datasets = (
     "hook150_v3_transl_statictimestep1",
     "jumpingjacks150_v3_tex_statictimestep75",
@@ -20,7 +20,10 @@ map_names = (
 # Base path
 base_path = Path("~/GI-GS/outputs_diffuse").expanduser()
 
-# Iterate through datasets and map names
+# Global accumulators
+global_psnr, global_ssim, global_lpips = [], [], []
+
+# Iterate through all dataset/map combinations
 for dataset in datasets:
     for map_name in map_names:
         folder = base_path / dataset / map_name / "test" / "ours_None" / "pbr"
@@ -29,34 +32,33 @@ for dataset in datasets:
             print(f"Folder not found: {folder}")
             continue
 
-        # Look for any .json file containing "NVS" in the filename
         json_files = list(folder.glob("*NVS*.json"))
-
         if not json_files:
             print(f"No NVS JSON files in: {folder}")
             continue
-
-        psnr_vals, ssim_vals, lpips_vals = [], [], []
 
         for json_file in json_files:
             try:
                 with open(json_file, 'r') as f:
                     data = json.load(f)
-                    psnr_vals.append(data.get("psnr_avg"))
-                    ssim_vals.append(data.get("ssim_avg"))
-                    lpips_vals.append(data.get("lpips_avg"))
+                    if data.get("psnr_avg") is not None:
+                        global_psnr.append(data["psnr_avg"])
+                    if data.get("ssim_avg") is not None:
+                        global_ssim.append(data["ssim_avg"])
+                    if data.get("lpips_avg") is not None:
+                        global_lpips.append(data["lpips_avg"])
             except Exception as e:
                 print(f"Error reading {json_file}: {e}")
 
-        # Compute and print averages
-        if psnr_vals and ssim_vals and lpips_vals:
-            avg_psnr = sum(psnr_vals) / len(psnr_vals)
-            avg_ssim = sum(ssim_vals) / len(ssim_vals)
-            avg_lpips = sum(lpips_vals) / len(lpips_vals)
+# Compute global averages
+if global_psnr and global_ssim and global_lpips:
+    avg_psnr = sum(global_psnr) / len(global_psnr)
+    avg_ssim = sum(global_ssim) / len(global_ssim)
+    avg_lpips = sum(global_lpips) / len(global_lpips)
 
-            print(f"\nResults for {dataset} | {map_name}:")
-            print(f"  Average PSNR  : {avg_psnr:.3f}")
-            print(f"  Average SSIM  : {avg_ssim:.3f}")
-            print(f"  Average LPIPS : {avg_lpips:.3f}")
-        else:
-            print(f"Missing metrics in JSONs for: {folder}")
+    print("\n🎯 Global Averages Across All NVS JSONs:")
+    print(f"  PSNR   (avg): {avg_psnr:.3f}")
+    print(f"  SSIM   (avg): {avg_ssim:.4f}")
+    print(f"  LPIPS  (avg): {avg_lpips:.4f}")
+else:
+    print("\n⚠️ Not enough data to compute global averages.")
