@@ -25,13 +25,13 @@ for d in "${datasets[@]}"; do
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR and MAP_NAME: $MAP_NAME"
 
     # Uncomment below to execute your actual command
-    #python relight.py \
-    #  -m outputs_diffuse/$d/$DATA_SUBDIR/ \
-    #  -s data/$d/ \
-    #  --checkpoint outputs_diffuse/$d/$DATA_SUBDIR/chkpnt35000.pth \
-    #  --hdri data/$d/$MAP_NAME.hdr \
-    # --eval \
-    #  --gamma
+    python relight.py \
+      -m outputs_diffuse/$d/$DATA_SUBDIR/ \
+      -s data/$d/ \
+      --checkpoint outputs_diffuse/$d/$DATA_SUBDIR/chkpnt35000.pth \
+      --hdri data/$d/$MAP_NAME.hdr \
+     --eval \
+      --gamma
 
 
     python relight_eval.py \
