@@ -48,7 +48,7 @@ if __name__ == "__main__":
                 print('!!!! ', 'done')
                 gt_img = np.array(Image.open(os.path.join(f"/home/pwojcik/GI-GS/data/{dataset}/{map_name}/r_{(10*(idx+1)):04}.png")))[..., :3]  # [H, W, 3]
                 gt_img = torch.from_numpy(gt_img).cuda().permute(2, 0, 1) / 255.0  # [3, H, W]
-                gt_img = F.interpolate(gt_img, size=(400, 400), mode='bilinear', align_corners=False)
+                gt_img = F.interpolate(gt_img.unsqueeze(0), size=(400, 400), mode='bilinear', align_corners=False).squeeze(0)
 
                 psnr_avg += get_psnr(gt_img, prediction).mean().double()
                 ssim_avg += get_ssim(gt_img, prediction).mean().double()
