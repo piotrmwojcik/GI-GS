@@ -1,5 +1,6 @@
 import os
 import json
+import math
 from pathlib import Path
 
 # Datasets and map names
@@ -20,8 +21,16 @@ map_names = (
 # Base path
 base_path = Path("~/GI-GS/outputs_diffuse").expanduser()
 
-# Global accumulators
+# Global value lists
 global_psnr, global_ssim, global_lpips = [], [], []
+
+# Function to compute mean and std
+def compute_mean_std(values):
+    if not values:
+        return 0.0, 0.0
+    mean = sum(values) / len(values)
+    std = math.sqrt(sum((x - mean) ** 2 for x in values) / len(values))
+    return mean, std
 
 # Iterate through all dataset/map combinations
 for dataset in datasets:
@@ -50,15 +59,15 @@ for dataset in datasets:
             except Exception as e:
                 print(f"Error reading {json_file}: {e}")
 
-# Compute global averages
+# Compute and print results
 if global_psnr and global_ssim and global_lpips:
-    avg_psnr = sum(global_psnr) / len(global_psnr)
-    avg_ssim = sum(global_ssim) / len(global_ssim)
-    avg_lpips = sum(global_lpips) / len(global_lpips)
+    psnr_mean, psnr_std = compute_mean_std(global_psnr)
+    ssim_mean, ssim_std = compute_mean_std(global_ssim)
+    lpips_mean, lpips_std = compute_mean_std(global_lpips)
 
-    print("\n🎯 Global Averages Across All Albedo JSONs:")
-    print(f"  PSNR   (avg): {avg_psnr:.3f}")
-    print(f"  SSIM   (avg): {avg_ssim:.4f}")
-    print(f"  LPIPS  (avg): {avg_lpips:.4f}")
+    print("\n🎯 Global Averages and Standard Deviations Across All Albedo JSONs:")
+    print(f"  PSNR   : {psnr_mean:.3f} ± {psnr_std:.3f}")
+    print(f"  SSIM   : {ssim_mean:.3f} ± {ssim_std:.3f}")
+    print(f"  LPIPS  : {lpips_mean:.3f} ± {lpips_std:.3f}")
 else:
-    print("\n⚠️ Not enough data to compute global averages.")
+    print("\n⚠️ Not enough data to compute global statistics.")
