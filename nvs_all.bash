@@ -26,6 +26,7 @@ for d in "${datasets[@]}"; do
     --eval \
     --skip_train \
     --pbr \
+    --gamma \
     --indirect
   done
 done
