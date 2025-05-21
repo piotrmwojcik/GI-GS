@@ -13,8 +13,11 @@ datasets=(
 for d in "${datasets[@]}"; do
   pairs=(
     "chapel_day_4k_32x16_rot0 golden_bay_4k_32x16_rot330"
+    "chapel_day_4k_32x16_rot0 dam_wall_4k_32x16_rot90"
     "dam_wall_4k_32x16_rot90 small_harbour_sunset_4k_32x16_rot270"
+    "dam_wall_4k_32x16_rot90 golden_bay_4k_32x16_rot330"
     "golden_bay_4k_32x16_rot330 dam_wall_4k_32x16_rot90"
+    "golden_bay_4k_32x16_rot330 chapel_day_4k_32x16_rot0"
   )
 
   for pair in "${pairs[@]}"; do
@@ -36,7 +39,7 @@ for d in "${datasets[@]}"; do
 
 
     python relight_eval.py \
-      --output_dir outputs_diffuse/$d/$DATA_SUBDIR/test/ours_None/relight/ \
+      --output_dir outputs_diffuse_appendix/$d/$DATA_SUBDIR/test/ours_None/relight/ \
       --gt_dir data/$d/
   done
 done
