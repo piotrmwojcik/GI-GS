@@ -140,32 +140,33 @@ def render_set(
 
     # build mip for environment light
     light.build_mips()
-    #envmap = light.export_envmap(return_img=True).permute(2, 0, 1)
-    #hdr_np = envmap.clone().permute(1, 2, 0).cpu().numpy().astype(np.float32)  # H, W, C
+    envmap = light.export_envmap(return_img=True).permute(2, 0, 1)
+    hdr_np = envmap.clone().permute(1, 2, 0).cpu().numpy().astype(np.float32)  # H, W, C
 
     # Save as HDR image using OpenCV
-    #hdr_path = os.path.join(model_path, name, "envmap.exr")
-    #print('!!! ', hdr_path)
-    #os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
-    #cv2.imwrite(hdr_path, cv2.cvtColor(hdr_np, cv2.COLOR_RGB2BGR))
-    #envmap = envmap / envmap.max()#.clamp(min=0.0, max=1.0)
-    #os.makedirs(os.path.join(model_path, name), exist_ok=True)
-    #envmap_path = os.path.join(model_path, name, "envmap.png")
-    #torchvision.utils.save_image(envmap, envmap_path)
-    #torchvision.utils.save_image(light.export_envmap(return_img=True).permute(2, 0, 1),
-    #                             os.path.join(model_path, name, "unscaled_envmap.png"))
+    hdr_path = os.path.join(model_path, name, "envmap.exr")
+    print('!!! ', hdr_path)
+    os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
+    cv2.imwrite(hdr_path, cv2.cvtColor(hdr_np, cv2.COLOR_RGB2BGR))
+    envmap = envmap / envmap.max()#.clamp(min=0.0, max=1.0)
+    os.makedirs(os.path.join(model_path, name), exist_ok=True)
+    envmap_path = os.path.join(model_path, name, "envmap.png")
+    torchvision.utils.save_image(envmap, envmap_path)
+    torchvision.utils.save_image(light.export_envmap(return_img=True).permute(2, 0, 1),
+                                 os.path.join(model_path, name, "unscaled_envmap.png"))
 
-    #hdri_path = '/home/pwojcik/GI-GS/data/hook150_v3_transl_statictimestep1/golden_bay_4k_32x16_rot330.hdr'
-    #print(f"read hdri from {hdri_path}")
-    #hdri = read_hdr(hdri_path)
-    #hdri = torch.from_numpy(hdri).cuda()
-    #res = 256
-    #cubemap = CubemapLight(base_res=res).cuda()
-    #cubemap.base.data = latlong_to_cubemap(hdri, [res, res])
-    #cubemap.eval()
-    #test_envmap = cubemap.export_envmap(return_img=True).permute(2, 0, 1).clamp(min=0.0, max=1.0)
-    #envmap_path_test = os.path.join(model_path, name, "envmap_test.png")
-    #torchvision.utils.save_image(test_envmap, envmap_path_test)
+    hdri_path = '/home/pwojcik/GI-GS/data/hook150_v3_transl_statictimestep1/golden_bay_4k_32x16_rot330.hdr'
+    print(f"read hdri from {hdri_path}")
+    hdri = read_hdr(hdri_path)
+    hdri = torch.from_numpy(hdri).cuda()
+    res = 256
+    cubemap = CubemapLight(base_res=res).cuda()
+    cubemap.base.data = latlong_to_cubemap(hdri, [res, res])
+    cubemap.eval()
+    test_envmap = cubemap.export_envmap(return_img=True).permute(2, 0, 1).clamp(min=0.0, max=1.0)
+    envmap_path_test = os.path.join(model_path, name, "envmap_test.png")
+    torchvision.utils.save_image(test_envmap, envmap_path_test)
+
 
     render_path = os.path.join(model_path, name, f"ours_{iteration}", "renders")
     gts_path = os.path.join(model_path, name, f"ours_{iteration}", "gt")
