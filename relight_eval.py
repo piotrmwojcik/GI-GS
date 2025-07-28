@@ -49,7 +49,7 @@ if __name__ == "__main__":
                 prediction = np.array(Image.open(os.path.join(args.output_dir, f"r_{(10*(idx+1)):04}_{light_name}.png")))[..., :3]  # [H, W, 3]
                 prediction = torch.from_numpy(prediction).cuda().permute(2, 0, 1) / 255.0  # [3, H, W]
                 print('!!!! ', 'done')
-                gt_img = np.array(Image.open(os.path.join(f"{gt_dir}/{dataset}/{map_name}/r_{(10*(idx+1)):04}.png")))[..., :3]  # [H, W, 3]
+                gt_img = np.array(Image.open(os.path.join(f"{args.gt_dir}/{dataset}/{map_name}/r_{(10*(idx+1)):04}.png")))[..., :3]  # [H, W, 3]
                 gt_img = torch.from_numpy(gt_img).cuda().permute(2, 0, 1) / 255.0  # [3, H, W]
                 gt_img = F.interpolate(gt_img.unsqueeze(0), size=(400, 400), mode='bilinear', align_corners=False).squeeze(0)
 
