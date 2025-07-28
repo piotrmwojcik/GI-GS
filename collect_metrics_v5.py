@@ -19,7 +19,7 @@ map_names = (
 )
 
 # Base path
-base_path = Path("~/GI-GS/outputs_specular").expanduser()
+base_path = Path("~/GI-GS/outputs_specular_JULY").expanduser()
 
 # Global value lists
 global_psnr, global_ssim, global_lpips = [], [], []
