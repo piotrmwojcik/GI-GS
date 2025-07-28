@@ -20,7 +20,7 @@ for d in "${datasets[@]}"; do
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR"
 
 python relight.py -m outputs_diffuse/$d -s data/$d \
-      --checkpoint outputs/$d/$DATA_SUBDIR/chkpnt35000.pth --hdri data/$d/$DATA_SUBDIR.hdr \
+      --checkpoint outputs_diffuse/$d/$DATA_SUBDIR/chkpnt35000.pth --hdri data/$d/$DATA_SUBDIR.hdr \
       --eval --gamma
   done
 done
