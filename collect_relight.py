@@ -66,7 +66,7 @@ if psnr_values and ssim_values and lpips_values:
 
     print("\n✅ Global Averages and Standard Deviations Across All JSONs:")
     print(f"psnr_avg:  {psnr_mean:.3f} ± {psnr_std:.3f}")
-    print(f"ssim_avg:  {ssim_mean:.4f} ± {ssim_std:.4f}")
-    print(f"lpips_avg: {lpips_mean:.4f} ± {lpips_std:.4f}")
+    print(f"ssim_avg:  {ssim_mean:.3f} ± {ssim_std:.3f}")
+    print(f"lpips_avg: {lpips_mean:.3f} ± {lpips_std:.3f}")
 else:
     print("❌ No valid JSON files found.")

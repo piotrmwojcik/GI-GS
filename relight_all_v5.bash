@@ -40,6 +40,6 @@ for d in "${datasets[@]}"; do
 
     python relight_eval.py \
       --output_dir outputs_specular_JULY/$d/$DATA_SUBDIR/test/ours_None/relight/ \
-      --gt_dir data/$d/
+      --gt_dir data_specular_new/datasets_v5_specular32/$d/
   done
 done
