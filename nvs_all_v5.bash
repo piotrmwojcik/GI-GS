@@ -20,9 +20,9 @@ for d in "${datasets[@]}"; do
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR"
 
     python render.py \
-    -m outputs_diffuse_appendix/"$d"/$DATA_SUBDIR \
-    -s data/"$d" \
-    --checkpoint outputs_diffuse_appendix/"$d"/$DATA_SUBDIR/chkpnt35000.pth \
+    -m outputs_specular_JULY/"$d"/$DATA_SUBDIR \
+    -s data_specular_new/datasets_v5_specular32/"$d" \
+    --checkpoint outputs_specular_JULY/"$d"/$DATA_SUBDIR/chkpnt35000.pth \
     --eval \
     --skip_train \
     --pbr \
