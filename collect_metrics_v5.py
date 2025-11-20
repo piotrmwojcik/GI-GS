@@ -19,10 +19,10 @@ map_names = (
 )
 
 # Base path
-base_path = Path("~/GI-GS/outputs_specular_JULY").expanduser()
+base_path = Path("~/GI-GS/outputs_specular_JULY_bck").expanduser()
 
 # Global value lists
-global_psnr, global_ssim, global_lpips = [], [], []
+global_psnr, global_ssim, global_lpips, global_roughness_mse = [], [], [], []
 
 # Function to compute mean and std
 def compute_mean_std(values):
@@ -56,18 +56,22 @@ for dataset in datasets:
                         global_ssim.append(data["albedo_ssim"])
                     if data.get("albedo_lpips") is not None:
                         global_lpips.append(data["albedo_lpips"])
+                    if data.get("roughness_mse") is not None:
+                        global_roughness_mse.append(data["roughness_mse"])
             except Exception as e:
                 print(f"Error reading {json_file}: {e}")
 
 # Compute and print results
-if global_psnr and global_ssim and global_lpips:
+if global_psnr and global_ssim and global_lpips and global_roughness_mse:
     psnr_mean, psnr_std = compute_mean_std(global_psnr)
     ssim_mean, ssim_std = compute_mean_std(global_ssim)
     lpips_mean, lpips_std = compute_mean_std(global_lpips)
+    mse_mean, mse_std = compute_mean_std(global_roughness_mse)
 
     print("\n🎯 Global Averages and Standard Deviations Across All Albedo JSONs:")
     print(f"  PSNR   : {psnr_mean:.3f} ± {psnr_std:.3f}")
     print(f"  SSIM   : {ssim_mean:.3f} ± {ssim_std:.3f}")
     print(f"  LPIPS  : {lpips_mean:.3f} ± {lpips_std:.3f}")
+    print(f"  MSE  : {mse_mean:.3f} ± {mse_std:.3f}")
 else:
     print("\n⚠️ Not enough data to compute global statistics.")
