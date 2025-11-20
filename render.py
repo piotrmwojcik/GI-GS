@@ -576,11 +576,12 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
 
-        print('!!!! ', albedo_gt.shape, mask_3d.shape)
-        print('!!!! ', rough_gt.shape, mask_3d.shape)
 
         albedo_gt[~mask_3d] = 0
         rough_gt[~mask_3d] = 0
+        print('!!!! ', albedo_gt.shape, mask_3d.shape)
+        print('!!!! ', rough_gt.shape, mask_3d.shape)
+
         albedo_gt = torch.from_numpy(albedo_gt).cuda() / 255.0  # [H, W, 3]
         rough_gt = torch.from_numpy(rough_gt).cuda() / 255.0
         albedo_gt = srgb_to_linear(albedo_gt)
@@ -588,7 +589,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         masks.append(mask)
         albedo_gts.append(albedo_gt)
         gt_albedo_list.append(albedo_gt[mask])
-        roughness_gts.append(rough_gt[mask])
+        roughness_gts.append(rough_gt)
         # read prediction
         albedo_map = np.array(Image.open(os.path.join(pbr_dir, f"{filenames[-1]}_albedo.png")))[..., :3]
         albedo_map[~mask_3d] = 0
