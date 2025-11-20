@@ -20,7 +20,7 @@ for d in "${datasets[@]}"; do
     export DATASET
     echo "Processing DATASET: $d with DATA_SUBDIR: $DATA_SUBDIR"
 
-    python render.py -m outputs_specular_JULY_bck/$d/$DATA_SUBDIR -s data/"$d" --checkpoint outputs_specular_JULY_bck/$d/$DATA_SUBDIR/chkpnt35000.pth --eval --skip_train --brdf_eval
+    python render.py -m outputs_specular_JULY_bck/$d/$DATA_SUBDIR -s data_specular_new/datasets_v5_specular32/"$d" --checkpoint outputs_specular_JULY_bck/$d/$DATA_SUBDIR/chkpnt35000.pth --eval --skip_train --brdf_eval
 
   done
 done
