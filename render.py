@@ -510,14 +510,18 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
     albedo_psnr_avg = 0.0
     albedo_ssim_avg = 0.0
     albedo_lpips_avg = 0.0
+    roughness_mse_avg = 0.0
     mse_loss = 0.0
 
     pbr_path = os.path.join(model_path, name, f"ours_{iteration}", "pbr")
     albedo_gts = []
     albedo_maps = []
+    roughness_maps = []
+    roughness_gts = []
     masks = []
     gt_albedo_list = []
     reconstructed_albedo_list = []
+    reconstructed_roughness_list = []
     lpips_fn = LPIPS(net="vgg").cuda()
     mse = torch.nn.MSELoss(reduction='mean')
     filenames = []
@@ -531,12 +535,16 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             data_root2 = data_root.replace("blender_LDR", "ground_truth")
         else:
             albedo_path = frame["file_path"].replace("rgba", "albedo") + ".png"
+        print('!!!! ', albedo_path)
         filenames.append(frame["file_path"])
         resolution = 2
         match = find_matching_file(os.path.join(data_root, 'albedo'), albedo_path)
         #img_with_mask = Image.open(os.path.join(data_root, albedo_path))
         albedo_img = Image.open(os.path.join(data_root, 'albedo', match))
         albedo_gt = np.array(albedo_img)[..., :3]
+
+        rough_img = Image.open(os.path.join(data_root, 'roughness', albedo_path))
+        rough_gt = np.array(rough_img)  # H, W, 3  (uint8)
 
         orig_h, orig_w = albedo_gt.shape[:2]
         target_w = round(orig_w / (1.0 * resolution))
@@ -551,6 +559,10 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             match = find_matching_file(os.path.join(data_root, 'albedo'), albedo_path)
             albedo_img = Image.open(os.path.join(data_root, 'albedo', match))
             albedo_gt = np.array(albedo_img.resize(target_size))[..., :3]
+
+            rough_img = Image.open(os.path.join(data_root, 'roughness', albedo_path))
+            rough_gt = np.array(rough_img.resize(target_size))[..., :3]  # H, W, 3  (uint8)
+
         # mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
         if "orb" in data_root:
             mask = np.array(Image.open(os.path.join(data_root, light_name, mask_path)).resize((512, 512))) > 0
@@ -566,20 +578,33 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         #print('!!!! ', albedo_gt.shape, mask_3d.shape)
 
         albedo_gt[~mask_3d] = 0
+        rough_gt[~mask_3d] = 0
         albedo_gt = torch.from_numpy(albedo_gt).cuda() / 255.0  # [H, W, 3]
+        rough_gt = torch.from_numpy(rough_gt).cuda() / 255.0
         albedo_gt = srgb_to_linear(albedo_gt)
         mask = torch.from_numpy(mask).cuda()  # [H, W]
         masks.append(mask)
         albedo_gts.append(albedo_gt)
         gt_albedo_list.append(albedo_gt[mask])
+        roughness_gts.append(rough_gt[mask])
         # read prediction
         albedo_map = np.array(Image.open(os.path.join(pbr_dir, f"{filenames[-1]}_albedo.png")))[..., :3]
         albedo_map[~mask_3d] = 0
+
+        roughness_map = np.array(Image.open(os.path.join(pbr_dir, f"{filenames[-1]}_roughness.png")))[..., :3]
+        roughness_map[~mask_3d] = 0
+
         # H, W3, _ = brdf_map.shape
         # albedo_map = brdf_map[:, : (W3 // 3), :]  # [H, W, 3]
         albedo_map = torch.from_numpy(albedo_map).cuda() / 255.0  # [H, W, 3]
         albedo_maps.append(albedo_map)
         reconstructed_albedo_list.append(albedo_map[mask])
+
+        roughness_map = torch.from_numpy(roughness_map).cuda() / 255.0  # [H, W, 3]
+        roughness_maps.append(roughness_map)
+        reconstructed_roughness_list.append(roughness_map[mask])
+
+
     gt_albedo_all = torch.cat(gt_albedo_list, dim=0)
     albedo_map_all = torch.cat(reconstructed_albedo_list, dim=0)
     # single_channel_ratio = (gt_albedo_all / albedo_map_all.clamp(min=1e-6))[..., 0].median()  # [1]
@@ -596,9 +621,9 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
 
     print(filenames)
 
-    for idx, (mask, albedo_map, albedo_gt, filename) in enumerate(tqdm(zip(masks, albedo_maps, albedo_gts, filenames))):
+    for idx, (mask, albedo_map, roughness_map, roughness_gt, albedo_gt, filename) in enumerate(tqdm(zip(masks, albedo_maps, roughness_maps,  roughness_gts, albedo_gts, filenames))):
         print(f"### shapes {albedo_map.shape} {albedo_gt.shape}")
-        roughmse =(albedo_map - albedo_gt) ** 2  # 平方误差
+        roughmse = (roughness_map - roughness_gt) ** 2  # 平方误差
         masked_diff = roughmse[mask] 
         mse_loss += masked_diff.mean()
         #three_channel_ratio = (albedo_map / albedo_map.clamp_min(1e-6)).median(dim=0).values#.tolist()
@@ -615,16 +640,17 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
         albedo_psnr_avg += get_psnr(albedo_gt, albedo_map).mean().double()
         albedo_ssim_avg += get_ssim(albedo_gt, albedo_map).mean().double()
         albedo_lpips_avg += lpips_fn(albedo_gt, albedo_map).mean().double()
-        # roughmse = mse(albedo_gt, albedo_map).double()
+        roughness_mse_avg += mse_loss
 
     albedo_psnr = albedo_psnr_avg / len(frames)
     albedo_ssim = albedo_ssim_avg / len(frames)
     albedo_lpips = albedo_lpips_avg / len(frames)
-    roughmse = mse_loss / len(frames)
+    roughness_mse = mse_loss / len(frames)
     metrics = {
         "albedo_psnr": float(albedo_psnr.item()),
         "albedo_ssim": float(albedo_ssim.item()),
-        "albedo_lpips": float(albedo_lpips.item())
+        "albedo_lpips": float(albedo_lpips.item()),
+        "roughness_mse": float(roughness_mse.item())
     }
 
     # Save to JSON
