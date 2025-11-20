@@ -563,6 +563,7 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             rough_img = Image.open(os.path.join(data_root, 'roughness', albedo_path))
             rough_gt = np.array(rough_img.resize(target_size))[..., :3]  # H, W, 3  (uint8)
 
+
         # mask = np.array(Image.open(os.path.join(data_root, albedo_path)))[..., 3] > 0
         if "orb" in data_root:
             mask = np.array(Image.open(os.path.join(data_root, light_name, mask_path)).resize((512, 512))) > 0
@@ -575,7 +576,8 @@ def eval_brdf(data_root: str, scene: Scene, model_path: str, name: str) -> None:
             expanded_mask = np.expand_dims(mask, axis=-1)
             mask_3d = np.repeat(expanded_mask, 3, axis=-1)
 
-        #print('!!!! ', albedo_gt.shape, mask_3d.shape)
+        print('!!!! ', albedo_gt.shape, mask_3d.shape)
+        print('!!!! ', rough_gt.shape, mask_3d.shape)
 
         albedo_gt[~mask_3d] = 0
         rough_gt[~mask_3d] = 0
